@@ -30,7 +30,7 @@ const handleSignup = (e) => {
         return false;
     }
     
-    sendAjax('POST', $("#signipForm").attr("action"), $("#signupForm").serialize(), redirect);
+    sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
     
     return false;
 };
@@ -39,9 +39,9 @@ const LoginWindow = (props) => {
 	return(
 	<form id="loginForm" name="loginForm"
 		onSubmit={handleLogin}
-		action='/login'
+		action="/login"
 		method="POST"
-		className='mainForm'
+		className="mainForm"
 		>
 		<label htmlFor="username">Username: </label>
 		<input id="user" type="text" name="username" placeholder="username"/>
@@ -95,10 +95,17 @@ const setup = (csrf) => {
 	
 	signupButton.addEventListener("click", (e) => {
 		e.preventDefault();
+		createSignupWindow(csrf);
+		return false;
+	});
+	
+	loginButton.addEventListener("click", (e) => {
+		e.preventDefault();
 		createLoginWindow(csrf);
 		return false;
 	});
-createLoginWindow(csrf);
+	
+	createLoginWindow(csrf);
 };
 
 const getToken = () => {
