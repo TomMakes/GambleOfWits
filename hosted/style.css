@@ -50,7 +50,7 @@ nav:nth-child(1) {
 .domoForm {
     border: 2px solid #338acc;
     height: 35px;
-    width: 700px;
+    width: 900px;
     margin-top:0px;
     padding-top:10px;
     background-color: #55acee;
@@ -253,10 +253,23 @@ h3.domoAge {
     font-size: 1.5em;
 }
 
+h3.domoBalance {
+    float:right;
+    text-align: left;
+    width: 100px;
+    font-weight: bold;
+    padding-right: 40px;
+    font-size: 1.5em;
+}
+
 .domo:first-child {
     margin-top: 10px;
 }
 
 .domo:last-child {
     margin-bottom:10px;
+}
+
+#Games {
+	padding-left: 40px;
 }
