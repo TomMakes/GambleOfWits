@@ -69,7 +69,7 @@ DomoSchema.statics.toggleTradable = (domoId, tradeBool, callback) => {
 	//Switch tradability
 	
 	let tradableVal;
-	if(tradeBool == 0) tradableVal = true; else tradableVal = false;
+	if(tradeBool === 0) tradableVal = true; else tradableVal = false;
 	
 	const setTradable = {
 		tradable: tradableVal 
