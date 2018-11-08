@@ -18,14 +18,25 @@ var handleAddDomo = function handleAddDomo(e) {
 };
 
 function handleSelectDomo(id) {
-	//event.preventdefault();
+	event.preventDefault();
 
 	console.log("Selected Domo");
-	console.dir(id);
 	loadDomoFromServer(id);
 
 	return false;
 };
+
+function handleSelectTradeDomo(id, tradeStatus) {
+	event.preventDefault();
+
+	console.log("Trade Toggle Domo");
+
+	if (tradeStatus) tradeStatus = "1";else tradeStatus = "0";
+
+	toggleDomoTrade(id, tradeStatus);
+
+	return false;
+}
 
 var DomoForm = function DomoForm(props) {
 	return React.createElement(
@@ -101,6 +112,13 @@ var DomoList = function DomoList(props) {
 						return handleSelectDomo(domo._id);
 					} },
 				" Select Me "
+			),
+			React.createElement(
+				"button",
+				{ className: "tradeDomo", onClick: function onClick() {
+						return handleSelectTradeDomo(domo._id, domo.tradable);
+					} },
+				" Trade Me "
 			)
 		);
 	});
@@ -120,7 +138,14 @@ var loadDomosFromServer = function loadDomosFromServer() {
 
 var loadDomoFromServer = function loadDomoFromServer(domoId) {
 	sendAjax('GET', '/getDomo', domoId, function (data) {
+		console.dir(data);
+	});
+};
 
+var toggleDomoTrade = function toggleDomoTrade(domoId, tradeStatus) {
+	var dataPack = domoId + "&" + tradeStatus;
+
+	sendAjax('GET', '/toggleTrade', dataPack, function (data) {
 		console.dir(data);
 	});
 };

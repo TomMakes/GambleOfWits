@@ -16,14 +16,27 @@ const handleAddDomo = (e) => {
 };
 
 function handleSelectDomo(id) {
-	//event.preventdefault();
+	event.preventDefault();
 
 	console.log("Selected Domo");
-	console.dir(id);
 	loadDomoFromServer(id);
 	
 	return false;
 };
+
+function handleSelectTradeDomo(id, tradeStatus) {
+	event.preventDefault();
+
+	console.log("Trade Toggle Domo");
+	
+	if(tradeStatus)
+		tradeStatus = "1";
+	else tradeStatus = "0";
+	
+	toggleDomoTrade(id, tradeStatus);
+	
+	return false;
+}
 
 const DomoForm = (props) => {
 	return (
@@ -66,6 +79,7 @@ const DomoList = function(props) {
 			<h3 className="domoRarity"> Rarity: {domo.rarity} </h3>
 			<h3 className="domoTradable"> Tradable: {domoTradeStatus} </h3>
 			<button className="selectDomo" onClick={() => handleSelectDomo(domo._id)}> Select Me </button>
+			<button className="tradeDomo" onClick={() => handleSelectTradeDomo(domo._id, domo.tradable)}> Trade Me </button>
 		</div>
 	);
   });
@@ -87,7 +101,14 @@ const loadDomosFromServer = () => {
 
 const loadDomoFromServer = (domoId) => {
 	sendAjax('GET', '/getDomo', domoId, (data) => {
+		console.dir(data);
+	});
+};
 
+const toggleDomoTrade = (domoId, tradeStatus) => {
+	let dataPack = domoId + "&" + tradeStatus;
+
+	sendAjax('GET', '/toggleTrade', dataPack, (data) => {
 		console.dir(data);
 	});
 };

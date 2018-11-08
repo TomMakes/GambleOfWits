@@ -79,13 +79,34 @@ const getDomo = (request, response) => {
 	reqId = reqId[1].split("&");
 	console.log(reqId[0]);
 	
-	return Domo.DomoModel.findById(reqId[0], (err, docs) => {
+	return Domo.DomoModel.findByID(reqId[0], (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });
 		}
 		
-		return res.json({ domos: docs });
+		return res.json({ domo: docs });
+	});
+};
+
+const toggleTradeDomo =  (request, response) => {
+	const req = request;
+	const res = response;
+	//parsing URL to obtain the string 
+	//Get rid of the URL and isolate variables
+	var reqId = req.url.split("?");
+	console.log(req.url);
+	//Take only the first variable as it's the domoId
+	reqId = reqId[1].split("&");
+	console.log(reqId[1]);
+	
+	return Domo.DomoModel.toggleTradable(reqId[0], reqId[1], (err, docs) => {
+		if(err) {
+			console.log(err);
+			return res.status(400).json({ error: 'An error occured' });
+		}
+		
+		return res.json({ domo: docs });
 	});
 };
 
@@ -95,3 +116,4 @@ module.exports.gamblePage = gamblePage;
 module.exports.getDomos = getDomos;
 module.exports.getDomo = getDomo;
 module.exports.make = makeDomo;
+module.exports.toggleTrade = toggleTradeDomo;

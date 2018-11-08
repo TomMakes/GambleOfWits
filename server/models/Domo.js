@@ -56,10 +56,32 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
 
 DomoSchema.statics.findByID = (domoId, callback) => {
 	const search = {
-		domo: convertId(domoId),
+		_id: convertId(domoId),
 	};
 	
-	return DomoModel.find(search).select('name rarity tradable').exec(callback);
+	return DomoModel.findOne(search).select('name rarity tradable').exec(callback);
+};
+
+DomoSchema.statics.toggleTradable = (domoId, tradeBool, callback) => {
+	const search = {
+		_id: convertId(domoId),
+	};
+	//Switch tradability
+	
+	let tradableVal;
+	if(tradeBool == 0) tradableVal = true; else tradableVal = false;
+	
+	const setTradable = {
+		tradable: tradableVal 
+	}; 
+	console.dir(setTradable);
+	//Update for new tradability
+	/*DomoModel.update(search, setTradable, {multi: false}, function(err, res) {
+    	if (err) throw err;
+    		console.log(res.result.nModified + " document(s) updated");
+  	}); */
+	//return DomoModel.findOne(search).select('tradable').exec(callback);
+	return DomoModel.findOne(search).select('name rarity tradable').exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);
