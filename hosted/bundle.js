@@ -17,14 +17,12 @@ var handleAddDomo = function handleAddDomo(e) {
 	return false;
 };
 
-var handleSelectDomo = function handleSelectDomo(e) {
-	e.preventDefault();
+function handleSelectDomo(id) {
+	//event.preventdefault();
 
 	console.log("Selected Domo");
-	console.dir(e);
-
-	//loadDomoFromServer();
-
+	console.dir(id);
+	loadDomoFromServer(id);
 
 	return false;
 };
@@ -78,7 +76,7 @@ var DomoList = function DomoList(props) {
 	var domoNodes = props.domos.map(function (domo) {
 		return React.createElement(
 			"div",
-			{ key: domo._id, className: "domo", id: domo._id },
+			{ key: domo._id, className: "domo" },
 			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo Face", className: "domoFace" }),
 			React.createElement(
 				"h3",
@@ -103,7 +101,9 @@ var DomoList = function DomoList(props) {
 			),
 			React.createElement(
 				"button",
-				{ className: "selectDomo", id: domo._id, onclick: handleSelectDomo },
+				{ className: "selectDomo", onClick: function onClick() {
+						return handleSelectDomo(domo._id);
+					} },
 				" Select Me "
 			)
 		);
@@ -124,8 +124,8 @@ var loadDomosFromServer = function loadDomosFromServer() {
 
 var loadDomoFromServer = function loadDomoFromServer(domoId) {
 	sendAjax('GET', '/getDomo', domoId, function (data) {
-		ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
-		console.log(data);
+
+		console.dir(data);
 	});
 };
 

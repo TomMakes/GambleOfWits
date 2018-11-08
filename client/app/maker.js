@@ -15,14 +15,12 @@ const handleAddDomo = (e) => {
 	return false;
 };
 
-const handleSelectDomo = (e) => {
-	e.preventDefault();
-	
+function handleSelectDomo(id) {
+	//event.preventdefault();
+
 	console.log("Selected Domo");
-	console.dir(e);
-	
-	//loadDomoFromServer();
-	
+	console.dir(id);
+	loadDomoFromServer(id);
 	
 	return false;
 };
@@ -61,12 +59,12 @@ const DomoList = function(props) {
 	  
   const domoNodes = props.domos.map(function(domo) {
 	return(
-		<div key={domo._id} className="domo" id={domo._id}>
+		<div key={domo._id} className="domo">
 			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="domoFace" />
 			<h3 className="domoName"> Name: {domo.name} </h3>
 			<h3 className="domoAge"> Age: {domo.age} </h3>
 			<h3 className="domoBalance"> Balance: {domo.balance} </h3>
-			<button className="selectDomo" id={domo._id} onclick={handleSelectDomo}> Select Me </button>
+			<button className="selectDomo" onClick={() => handleSelectDomo(domo._id)}> Select Me </button>
 		</div>
 	);
   });
@@ -88,10 +86,8 @@ const loadDomosFromServer = () => {
 
 const loadDomoFromServer = (domoId) => {
 	sendAjax('GET', '/getDomo', domoId, (data) => {
-		ReactDOM.render(
-			<DomoList domos={data.domos} />, document.querySelector("#domos")
-		);
-		console.log(data);
+
+		console.dir(data);
 	});
 };
 

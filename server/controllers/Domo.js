@@ -72,6 +72,7 @@ const getDomos = (request, response) => {
 const getDomo = (request, response) => {
 	const req = request;
 	const res = response;
+	console.dir(req.query);
 	
 	return Domo.DomoModel.findById(req.session.account._id, (err, docs) => {
 		if(err) {
@@ -87,4 +88,5 @@ const getDomo = (request, response) => {
 module.exports.makerPage = makerPage;
 module.exports.gamblePage = gamblePage;
 module.exports.getDomos = getDomos;
+module.exports.getDomo = getDomo;
 module.exports.make = makeDomo;
