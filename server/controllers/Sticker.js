@@ -1,75 +1,75 @@
 const models = require('../models');
 
-const Domo = models.Domo;
+const Sticker = models.Sticker;
 
 
 const makerPage = (req, res) => {
-  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  Sticker.StickerModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occured' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), stickers: docs });
   });
 };
 
 const gamblePage = (req, res) => {
-  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  Sticker.StickerModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occured' });
     }
 
-    return res.render('gamble', { csrfToken: req.csrfToken(), domos: docs });
+    return res.render('gamble', { csrfToken: req.csrfToken(), stickers: docs });
   });
 };
 
 
-const makeDomo = (req, res) => {
+const makeSticker = (req, res) => {
   if (!req.body.name || !req.body.rarity) {
     return res.status(400).json({ error: 'RAWR! Both name and rarity are required' });
   }
 
-  const domoData = {
+  const stickerData = {
     name: req.body.name,
     rarity: req.body.rarity,
 	tradable: false,
     owner: req.session.account._id,
   };
 
-  const newDomo = new Domo.DomoModel(domoData);
+  const newSticker = new Sticker.StickerModel(stickerData);
 
-  const domoPromise = newDomo.save();
+  const stickerPromise = newSticker.save();
 
-  domoPromise.then(() => res.json({ redirect: '/maker' }));
+  stickerPromise.then(() => res.json({ redirect: '/maker' }));
 
-  domoPromise.catch((err) => {
+  stickerPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists.' });
+      return res.status(400).json({ error: 'Sticker already exists.' });
     }
 
     return res.status(400).json({ error: 'An error occured' });
   });
-  return domoPromise;
+  return stickerPromise;
 };
 
-const getDomos = (request, response) => {
+const getStickers = (request, response) => {
 	const req = request;
 	const res = response;
 	
-	return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+	return Sticker.StickerModel.findByOwner(req.session.account._id, (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });
 		}
 		
-		return res.json({ domos: docs });
+		return res.json({ stickers: docs });
 	});
 };
 
-const getDomo = (request, response) => {
+const getSticker = (request, response) => {
 	const req = request;
 	const res = response;
 	//parsing URL to obtain the string 
@@ -79,17 +79,17 @@ const getDomo = (request, response) => {
 	reqId = reqId[1].split("&");
 	console.log(reqId[0]);
 	
-	return Domo.DomoModel.findByID(reqId[0], (err, docs) => {
+	return Sticker.StickerModel.findByID(reqId[0], (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });
 		}
 		
-		return res.json({ domo: docs });
+		return res.json({ sticker: docs });
 	});
 };
 
-const toggleTradeDomo =  (request, response) => {
+const toggleTradeSticker =  (request, response) => {
 	const req = request;
 	const res = response;
 	//parsing URL to obtain the string 
@@ -100,20 +100,20 @@ const toggleTradeDomo =  (request, response) => {
 	reqId = reqId[1].split("&");
 	console.log(reqId[1]);
 	
-	return Domo.DomoModel.toggleTradable(reqId[0], reqId[1], (err, docs) => {
+	return Sticker.StickerModel.toggleTradable(reqId[0], reqId[1], (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });
 		}
 		
-		return res.json({ domo: docs });
+		return res.json({ sticker: docs });
 	});
 };
 
 
 module.exports.makerPage = makerPage;
 module.exports.gamblePage = gamblePage;
-module.exports.getDomos = getDomos;
-module.exports.getDomo = getDomo;
-module.exports.make = makeDomo;
-module.exports.toggleTrade = toggleTradeDomo;
+module.exports.getStickers = getStickers;
+module.exports.getSticker = getSticker;
+module.exports.make = makeSticker;
+module.exports.toggleTrade = toggleTradeSticker;

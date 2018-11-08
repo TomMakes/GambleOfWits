@@ -1,112 +1,112 @@
-const handleAddDomo = (e) => {
+const handleAddSticker = (e) => {
 	e.preventDefault();
 	
-	$("#domoMessage").animate({width:'hide'}, 350);
+	$("#stickerMessage").animate({width:'hide'}, 350);
 	
-	if($("#domoName").val() == '' || $("#domoRarity").val() == '') {
+	if($("#stickerName").val() == '' || $("#stickerRarity").val() == '') {
 		handleError("RAWR! All fields are required");
 		return false;
 	}
 	
-	sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
-		loadDomosFromServer();
+	sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function() {
+		loadStickersFromServer();
 	});
 	
 	return false;
 };
 
-function handleSelectDomo(id) {
+function handleSelectSticker(id) {
 	event.preventDefault();
 
-	console.log("Selected Domo");
-	loadDomoFromServer(id);
+	console.log("Selected Sticker");
+	loadStickerFromServer(id);
 	
 	return false;
 };
 
-function handleSelectTradeDomo(id, tradeStatus) {
+function handleSelectTradeSticker(id, tradeStatus) {
 	event.preventDefault();
 
-	console.log("Trade Toggle Domo");
+	console.log("Trade Toggle Sticker");
 	
 	if(tradeStatus)
 		tradeStatus = "1";
 	else tradeStatus = "0";
 	
-	toggleDomoTrade(id, tradeStatus);
+	toggleStickerTrade(id, tradeStatus);
 	
 	return false;
 }
 
-const DomoForm = (props) => {
+const StickerForm = (props) => {
 	return (
-	<form id="domoForm"
-		onSubmit={handleAddDomo}
-		name="domoForm"
+	<form id="stickerForm"
+		onSubmit={handleAddSticker}
+		name="stickerForm"
 		action="/maker"
 		method="POST"
-		className="domoForm"
+		className="stickerForm"
 		>
 		
 		<label htmlFor="name">Name: </label>
-		<input id="domoName" type="text" name="name" placeholder="Domo Name"/>
+		<input id="stickerName" type="text" name="name" placeholder="Sticker Name"/>
 		<label htmlFor="rarity">Rarity: </label>
-		<input id="domoRarity" type="text" name="rarity" placeholder="Domo Rarity"/>
+		<input id="stickerRarity" type="text" name="rarity" placeholder="Sticker Rarity"/>
 		<input type="hidden" name="_csrf" value={props.csrf} />
-		<input className="makeDomoSubmit" type="submit" value="Make Domo" />
+		<input className="makeStickerSubmit" type="submit" value="Make Sticker" />
 	</form>
 	);
 }
 
 
-const DomoList = function(props) {
-	if(props.domos.length == 0) {
+const StickerList = function(props) {
+	if(props.stickers.length == 0) {
 		return (
-			<div className="domoList">
-				<h3 className="emptyDomo">No Domos yet</h3>
+			<div className="stickerList">
+				<h3 className="emptySticker">No Stickers yet</h3>
 			</div>
 		);
 	};
 	  
-  const domoNodes = props.domos.map(function(domo) {
-	  let domoTradeStatus = "False";
-	  if(domo.tradable) 
-		  domoTradeStatus = "True";
+  const stickerNodes = props.stickers.map(function(sticker) {
+	  let stickerTradeStatus = "False";
+	  if(sticker.tradable) 
+		  stickerTradeStatus = "True";
 	return(
-		<div key={domo._id} className="domo">
-			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="domoFace" />
-			<h3 className="domoName"> Name: {domo.name} </h3>
-			<h3 className="domoRarity"> Rarity: {domo.rarity} </h3>
-			<h3 className="domoTradable"> Tradable: {domoTradeStatus} </h3>
-			<button className="selectDomo" onClick={() => handleSelectDomo(domo._id)}> Select Me </button>
-			<button className="tradeDomo" onClick={() => handleSelectTradeDomo(domo._id, domo.tradable)}> Trade Me </button>
+		<div key={sticker._id} className="sticker">
+			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="stickerFace" />
+			<h3 className="stickerName"> Name: {sticker.name} </h3>
+			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
+			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
+			<button className="selectSticker" onClick={() => handleSelectSticker(sticker._id)}> Select Me </button>
+			<button className="tradeSticker" onClick={() => handleSelectTradeSticker(sticker._id, sticker.tradable)}> Trade Me </button>
 		</div>
 	);
   });
 return (
-	<div className="domoList">
-		{domoNodes}
+	<div className="stickerList">
+		{stickerNodes}
 	</div>
 	);
 };
 
-const loadDomosFromServer = () => {
-	sendAjax('GET', '/getDomos', null, (data) => {
+const loadStickersFromServer = () => {
+	sendAjax('GET', '/getStickers', null, (data) => {
 		ReactDOM.render(
-			<DomoList domos={data.domos} />, document.querySelector("#domos")
+			<StickerList stickers={data.stickers} />, document.querySelector("#stickers")
 		);
 		console.log(data);
 	});
 };
 
-const loadDomoFromServer = (domoId) => {
-	sendAjax('GET', '/getDomo', domoId, (data) => {
+const loadStickerFromServer = (stickerId) => {
+	sendAjax('GET', '/getSticker', stickerId, (data) => {
 		console.dir(data);
 	});
 };
 
-const toggleDomoTrade = (domoId, tradeStatus) => {
-	let dataPack = domoId + "&" + tradeStatus;
+const toggleStickerTrade = (stickerId, tradeStatus) => {
+	let dataPack = stickerId + "&" + tradeStatus;
 
 	sendAjax('GET', '/toggleTrade', dataPack, (data) => {
 		console.dir(data);
@@ -115,14 +115,14 @@ const toggleDomoTrade = (domoId, tradeStatus) => {
 
 const setup = function(csrf) {
 	ReactDOM.render(
-		<DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
+		<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
 	);
 	
 	ReactDOM.render(
-		<DomoList domos={[]} />, document.querySelector("#domos") 
+		<StickerList stickers={[]} />, document.querySelector("#stickers") 
 	);
 	
-	loadDomosFromServer();
+	loadStickersFromServer();
 };
 
 const getToken = () => {

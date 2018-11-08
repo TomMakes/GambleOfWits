@@ -1,122 +1,122 @@
 "use strict";
 
-var handleAddDomo = function handleAddDomo(e) {
+var handleAddSticker = function handleAddSticker(e) {
 	e.preventDefault();
 
-	$("#domoMessage").animate({ width: 'hide' }, 350);
+	$("#stickerMessage").animate({ width: 'hide' }, 350);
 
-	if ($("#domoName").val() == '' || $("#domoRarity").val() == '') {
+	if ($("#stickerName").val() == '' || $("#stickerRarity").val() == '') {
 		handleError("RAWR! All fields are required");
 		return false;
 	}
 
-	sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
-		loadDomosFromServer();
+	sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function () {
+		loadStickersFromServer();
 	});
 
 	return false;
 };
 
-function handleSelectDomo(id) {
+function handleSelectSticker(id) {
 	event.preventDefault();
 
-	console.log("Selected Domo");
-	loadDomoFromServer(id);
+	console.log("Selected Sticker");
+	loadStickerFromServer(id);
 
 	return false;
 };
 
-function handleSelectTradeDomo(id, tradeStatus) {
+function handleSelectTradeSticker(id, tradeStatus) {
 	event.preventDefault();
 
-	console.log("Trade Toggle Domo");
+	console.log("Trade Toggle Sticker");
 
 	if (tradeStatus) tradeStatus = "1";else tradeStatus = "0";
 
-	toggleDomoTrade(id, tradeStatus);
+	toggleStickerTrade(id, tradeStatus);
 
 	return false;
 }
 
-var DomoForm = function DomoForm(props) {
+var StickerForm = function StickerForm(props) {
 	return React.createElement(
 		"form",
-		{ id: "domoForm",
-			onSubmit: handleAddDomo,
-			name: "domoForm",
+		{ id: "stickerForm",
+			onSubmit: handleAddSticker,
+			name: "stickerForm",
 			action: "/maker",
 			method: "POST",
-			className: "domoForm"
+			className: "stickerForm"
 		},
 		React.createElement(
 			"label",
 			{ htmlFor: "name" },
 			"Name: "
 		),
-		React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
+		React.createElement("input", { id: "stickerName", type: "text", name: "name", placeholder: "Sticker Name" }),
 		React.createElement(
 			"label",
 			{ htmlFor: "rarity" },
 			"Rarity: "
 		),
-		React.createElement("input", { id: "domoRarity", type: "text", name: "rarity", placeholder: "Domo Rarity" }),
+		React.createElement("input", { id: "stickerRarity", type: "text", name: "rarity", placeholder: "Sticker Rarity" }),
 		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-		React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
+		React.createElement("input", { className: "makeStickerSubmit", type: "submit", value: "Make Sticker" })
 	);
 };
 
-var DomoList = function DomoList(props) {
-	if (props.domos.length == 0) {
+var StickerList = function StickerList(props) {
+	if (props.stickers.length == 0) {
 		return React.createElement(
 			"div",
-			{ className: "domoList" },
+			{ className: "stickerList" },
 			React.createElement(
 				"h3",
-				{ className: "emptyDomo" },
-				"No Domos yet"
+				{ className: "emptySticker" },
+				"No Stickers yet"
 			)
 		);
 	};
 
-	var domoNodes = props.domos.map(function (domo) {
-		var domoTradeStatus = "False";
-		if (domo.tradable) domoTradeStatus = "True";
+	var stickerNodes = props.stickers.map(function (sticker) {
+		var stickerTradeStatus = "False";
+		if (sticker.tradable) stickerTradeStatus = "True";
 		return React.createElement(
 			"div",
-			{ key: domo._id, className: "domo" },
-			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo Face", className: "domoFace" }),
+			{ key: sticker._id, className: "sticker" },
+			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo Face", className: "stickerFace" }),
 			React.createElement(
 				"h3",
-				{ className: "domoName" },
+				{ className: "stickerName" },
 				" Name: ",
-				domo.name,
+				sticker.name,
 				" "
 			),
 			React.createElement(
 				"h3",
-				{ className: "domoRarity" },
+				{ className: "stickerRarity" },
 				" Rarity: ",
-				domo.rarity,
+				sticker.rarity,
 				" "
 			),
 			React.createElement(
 				"h3",
-				{ className: "domoTradable" },
+				{ className: "stickerTradable" },
 				" Tradable: ",
-				domoTradeStatus,
+				stickerTradeStatus,
 				" "
 			),
 			React.createElement(
 				"button",
-				{ className: "selectDomo", onClick: function onClick() {
-						return handleSelectDomo(domo._id);
+				{ className: "selectSticker", onClick: function onClick() {
+						return handleSelectSticker(sticker._id);
 					} },
 				" Select Me "
 			),
 			React.createElement(
 				"button",
-				{ className: "tradeDomo", onClick: function onClick() {
-						return handleSelectTradeDomo(domo._id, domo.tradable);
+				{ className: "tradeSticker", onClick: function onClick() {
+						return handleSelectTradeSticker(sticker._id, sticker.tradable);
 					} },
 				" Trade Me "
 			)
@@ -124,26 +124,26 @@ var DomoList = function DomoList(props) {
 	});
 	return React.createElement(
 		"div",
-		{ className: "domoList" },
-		domoNodes
+		{ className: "stickerList" },
+		stickerNodes
 	);
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-	sendAjax('GET', '/getDomos', null, function (data) {
-		ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+var loadStickersFromServer = function loadStickersFromServer() {
+	sendAjax('GET', '/getStickers', null, function (data) {
+		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
 		console.log(data);
 	});
 };
 
-var loadDomoFromServer = function loadDomoFromServer(domoId) {
-	sendAjax('GET', '/getDomo', domoId, function (data) {
+var loadStickerFromServer = function loadStickerFromServer(stickerId) {
+	sendAjax('GET', '/getSticker', stickerId, function (data) {
 		console.dir(data);
 	});
 };
 
-var toggleDomoTrade = function toggleDomoTrade(domoId, tradeStatus) {
-	var dataPack = domoId + "&" + tradeStatus;
+var toggleStickerTrade = function toggleStickerTrade(stickerId, tradeStatus) {
+	var dataPack = stickerId + "&" + tradeStatus;
 
 	sendAjax('GET', '/toggleTrade', dataPack, function (data) {
 		console.dir(data);
@@ -151,11 +151,11 @@ var toggleDomoTrade = function toggleDomoTrade(domoId, tradeStatus) {
 };
 
 var setup = function setup(csrf) {
-	ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector("#makeDomo"));
+	ReactDOM.render(React.createElement(StickerForm, { csrf: csrf }), document.querySelector("#makeSticker"));
 
-	ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector("#domos"));
+	ReactDOM.render(React.createElement(StickerList, { stickers: [] }), document.querySelector("#stickers"));
 
-	loadDomosFromServer();
+	loadStickersFromServer();
 };
 
 var getToken = function getToken() {
@@ -171,11 +171,11 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
     $("#errorMessage").text(message);
-    $("#domoMessage").animate({ width: 'toggle' }, 350);
+    $("#stickerMessage").animate({ width: 'toggle' }, 350);
 };
 
 var redirect = function redirect(response) {
-    $("#domoMessage").animate({ width: 'hide' }, 350);
+    $("#stickerMessage").animate({ width: 'hide' }, 350);
     window.location = response.redirect;
 };
 

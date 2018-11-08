@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let DomoModel = {};
+let StickerModel = {};
 
 // mongoose.Types.ObjectID is a function that
 // converts string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const StickerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -40,31 +40,31 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+StickerSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   rarity: doc.rarity,
   tradable: doc.tradable,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+StickerSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name rarity tradable').exec(callback);
+  return StickerModel.find(search).select('name rarity tradable').exec(callback);
 };
 
-DomoSchema.statics.findByID = (domoId, callback) => {
+StickerSchema.statics.findByID = (stickId, callback) => {
 	const search = {
-		_id: convertId(domoId),
+		_id: convertId(stickId),
 	};
 	
-	return DomoModel.findOne(search).select('name rarity tradable').exec(callback);
+	return StickerModel.findOne(search).select('name rarity tradable').exec(callback);
 };
 
-DomoSchema.statics.toggleTradable = (domoId, tradeBool, callback) => {
+StickerSchema.statics.toggleTradable = (stickId, tradeBool, callback) => {
 	const search = {
-		_id: convertId(domoId),
+		_id: convertId(stickId),
 	};
 	//Switch tradability
 	
@@ -81,10 +81,10 @@ DomoSchema.statics.toggleTradable = (domoId, tradeBool, callback) => {
     		console.log(res.result.nModified + " document(s) updated");
   	}); */
 	//return DomoModel.findOne(search).select('tradable').exec(callback);
-	return DomoModel.findOne(search).select('name rarity tradable').exec(callback);
+	return StickerModel.findOne(search).select('name rarity tradable').exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+StickerModel = mongoose.model('Sticker', StickerSchema);
 
-module.exports.DomoModel = DomoModel;
-module.exports.DomoSchema = DomoSchema;
+module.exports.StickerModel = StickerModel;
+module.exports.StickerSchema = StickerSchema;
