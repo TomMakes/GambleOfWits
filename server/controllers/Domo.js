@@ -27,14 +27,14 @@ const gamblePage = (req, res) => {
 
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age || !req.body.balance) {
-    return res.status(400).json({ error: 'RAWR! Both name, age, and balance are required' });
+  if (!req.body.name || !req.body.rarity) {
+    return res.status(400).json({ error: 'RAWR! Both name and rarity are required' });
   }
 
   const domoData = {
     name: req.body.name,
-    age: req.body.age,
-	balance: req.body.balance,
+    rarity: req.body.rarity,
+	tradable: false,
     owner: req.session.account._id,
   };
 
@@ -72,9 +72,14 @@ const getDomos = (request, response) => {
 const getDomo = (request, response) => {
 	const req = request;
 	const res = response;
-	console.dir(req.query);
+	//parsing URL to obtain the string 
+	//Get rid of the URL and isolate variables
+	var reqId = req.url.split("?");
+	//Take only the first variable as it's the domoId
+	reqId = reqId[1].split("&");
+	console.log(reqId[0]);
 	
-	return Domo.DomoModel.findById(req.session.account._id, (err, docs) => {
+	return Domo.DomoModel.findById(reqId[0], (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });

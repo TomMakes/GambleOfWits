@@ -17,13 +17,7 @@ const DomoSchema = new mongoose.Schema({
     set: setName,
   },
 
-  age: {
-    type: Number,
-    min: 0,
-    required: true,
-  },
-	
-  balance: {
+  rarity: {
     type: Number,
     min: 0,
     required: true,
@@ -34,6 +28,11 @@ const DomoSchema = new mongoose.Schema({
     required: true,
     ref: 'Account',
   },
+	
+  tradable:{
+	type: Boolean,
+	required: true,
+  },
 
   createdData: {
     type: Date,
@@ -43,8 +42,8 @@ const DomoSchema = new mongoose.Schema({
 
 DomoSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
-  balance: doc.balance,
+  rarity: doc.rarity,
+  tradable: doc.tradable,
 });
 
 DomoSchema.statics.findByOwner = (ownerId, callback) => {
@@ -52,7 +51,7 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age balance').exec(callback);
+  return DomoModel.find(search).select('name rarity tradable').exec(callback);
 };
 
 DomoSchema.statics.findByID = (domoId, callback) => {
@@ -60,7 +59,7 @@ DomoSchema.statics.findByID = (domoId, callback) => {
 		domo: convertId(domoId),
 	};
 	
-	return DomoModel.find(search).select('name age balance').exec(callback);
+	return DomoModel.find(search).select('name rarity tradable').exec(callback);
 };
 
 DomoModel = mongoose.model('Domo', DomoSchema);

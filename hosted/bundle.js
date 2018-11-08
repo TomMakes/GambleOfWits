@@ -5,7 +5,7 @@ var handleAddDomo = function handleAddDomo(e) {
 
 	$("#domoMessage").animate({ width: 'hide' }, 350);
 
-	if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoBalance").val() == '') {
+	if ($("#domoName").val() == '' || $("#domoRarity").val() == '') {
 		handleError("RAWR! All fields are required");
 		return false;
 	}
@@ -45,16 +45,10 @@ var DomoForm = function DomoForm(props) {
 		React.createElement("input", { id: "domoName", type: "text", name: "name", placeholder: "Domo Name" }),
 		React.createElement(
 			"label",
-			{ htmlFor: "age" },
-			"Age: "
+			{ htmlFor: "rarity" },
+			"Rarity: "
 		),
-		React.createElement("input", { id: "domoAge", type: "text", name: "age", placeholder: "Domo Age" }),
-		React.createElement(
-			"label",
-			{ htmlFor: "balance" },
-			"Balance: "
-		),
-		React.createElement("input", { id: "domoBalance", type: "text", name: "balance", placeholder: "Domo Balance" }),
+		React.createElement("input", { id: "domoRarity", type: "text", name: "rarity", placeholder: "Domo Rarity" }),
 		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
 		React.createElement("input", { className: "makeDomoSubmit", type: "submit", value: "Make Domo" })
 	);
@@ -74,6 +68,8 @@ var DomoList = function DomoList(props) {
 	};
 
 	var domoNodes = props.domos.map(function (domo) {
+		var domoTradeStatus = "False";
+		if (domo.tradable) domoTradeStatus = "True";
 		return React.createElement(
 			"div",
 			{ key: domo._id, className: "domo" },
@@ -87,16 +83,16 @@ var DomoList = function DomoList(props) {
 			),
 			React.createElement(
 				"h3",
-				{ className: "domoAge" },
-				" Age: ",
-				domo.age,
+				{ className: "domoRarity" },
+				" Rarity: ",
+				domo.rarity,
 				" "
 			),
 			React.createElement(
 				"h3",
-				{ className: "domoBalance" },
-				" Balance: ",
-				domo.balance,
+				{ className: "domoTradable" },
+				" Tradable: ",
+				domoTradeStatus,
 				" "
 			),
 			React.createElement(

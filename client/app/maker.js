@@ -3,7 +3,7 @@ const handleAddDomo = (e) => {
 	
 	$("#domoMessage").animate({width:'hide'}, 350);
 	
-	if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoBalance").val() == '') {
+	if($("#domoName").val() == '' || $("#domoRarity").val() == '') {
 		handleError("RAWR! All fields are required");
 		return false;
 	}
@@ -37,10 +37,8 @@ const DomoForm = (props) => {
 		
 		<label htmlFor="name">Name: </label>
 		<input id="domoName" type="text" name="name" placeholder="Domo Name"/>
-		<label htmlFor="age">Age: </label>
-		<input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
-		<label htmlFor="balance">Balance: </label>
-		<input id="domoBalance" type="text" name="balance" placeholder="Domo Balance"/>
+		<label htmlFor="rarity">Rarity: </label>
+		<input id="domoRarity" type="text" name="rarity" placeholder="Domo Rarity"/>
 		<input type="hidden" name="_csrf" value={props.csrf} />
 		<input className="makeDomoSubmit" type="submit" value="Make Domo" />
 	</form>
@@ -58,12 +56,15 @@ const DomoList = function(props) {
 	};
 	  
   const domoNodes = props.domos.map(function(domo) {
+	  let domoTradeStatus = "False";
+	  if(domo.tradable) 
+		  domoTradeStatus = "True";
 	return(
 		<div key={domo._id} className="domo">
 			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="domoFace" />
 			<h3 className="domoName"> Name: {domo.name} </h3>
-			<h3 className="domoAge"> Age: {domo.age} </h3>
-			<h3 className="domoBalance"> Balance: {domo.balance} </h3>
+			<h3 className="domoRarity"> Rarity: {domo.rarity} </h3>
+			<h3 className="domoTradable"> Tradable: {domoTradeStatus} </h3>
 			<button className="selectDomo" onClick={() => handleSelectDomo(domo._id)}> Select Me </button>
 		</div>
 	);
