@@ -1,4 +1,4 @@
-const handleDomo = (e) => {
+const handleAddDomo = (e) => {
 	e.preventDefault();
 	
 	$("#domoMessage").animate({width:'hide'}, 350);
@@ -15,10 +15,22 @@ const handleDomo = (e) => {
 	return false;
 };
 
+const handleSelectDomo = (e) => {
+	e.preventDefault();
+	
+	console.log("Selected Domo");
+	console.dir(e);
+	
+	//loadDomoFromServer();
+	
+	
+	return false;
+};
+
 const DomoForm = (props) => {
 	return (
 	<form id="domoForm"
-		onSubmit={handleDomo}
+		onSubmit={handleAddDomo}
 		name="domoForm"
 		action="/maker"
 		method="POST"
@@ -49,11 +61,12 @@ const DomoList = function(props) {
 	  
   const domoNodes = props.domos.map(function(domo) {
 	return(
-		<div key={domo._id} className="domo">
+		<div key={domo._id} className="domo" id={domo._id}>
 			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="domoFace" />
 			<h3 className="domoName"> Name: {domo.name} </h3>
 			<h3 className="domoAge"> Age: {domo.age} </h3>
 			<h3 className="domoBalance"> Balance: {domo.balance} </h3>
+			<button className="selectDomo" id={domo._id} onclick={handleSelectDomo}> Select Me </button>
 		</div>
 	);
   });
@@ -69,6 +82,16 @@ const loadDomosFromServer = () => {
 		ReactDOM.render(
 			<DomoList domos={data.domos} />, document.querySelector("#domos")
 		);
+		console.log(data);
+	});
+};
+
+const loadDomoFromServer = (domoId) => {
+	sendAjax('GET', '/getDomo', domoId, (data) => {
+		ReactDOM.render(
+			<DomoList domos={data.domos} />, document.querySelector("#domos")
+		);
+		console.log(data);
 	});
 };
 

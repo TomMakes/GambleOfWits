@@ -1,6 +1,6 @@
 "use strict";
 
-var handleDomo = function handleDomo(e) {
+var handleAddDomo = function handleAddDomo(e) {
 	e.preventDefault();
 
 	$("#domoMessage").animate({ width: 'hide' }, 350);
@@ -17,11 +17,23 @@ var handleDomo = function handleDomo(e) {
 	return false;
 };
 
+var handleSelectDomo = function handleSelectDomo(e) {
+	e.preventDefault();
+
+	console.log("Selected Domo");
+	console.dir(e);
+
+	//loadDomoFromServer();
+
+
+	return false;
+};
+
 var DomoForm = function DomoForm(props) {
 	return React.createElement(
 		"form",
 		{ id: "domoForm",
-			onSubmit: handleDomo,
+			onSubmit: handleAddDomo,
 			name: "domoForm",
 			action: "/maker",
 			method: "POST",
@@ -66,7 +78,7 @@ var DomoList = function DomoList(props) {
 	var domoNodes = props.domos.map(function (domo) {
 		return React.createElement(
 			"div",
-			{ key: domo._id, className: "domo" },
+			{ key: domo._id, className: "domo", id: domo._id },
 			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo Face", className: "domoFace" }),
 			React.createElement(
 				"h3",
@@ -88,6 +100,11 @@ var DomoList = function DomoList(props) {
 				" Balance: ",
 				domo.balance,
 				" "
+			),
+			React.createElement(
+				"button",
+				{ className: "selectDomo", id: domo._id, onclick: handleSelectDomo },
+				" Select Me "
 			)
 		);
 	});
@@ -101,6 +118,14 @@ var DomoList = function DomoList(props) {
 var loadDomosFromServer = function loadDomosFromServer() {
 	sendAjax('GET', '/getDomos', null, function (data) {
 		ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+		console.log(data);
+	});
+};
+
+var loadDomoFromServer = function loadDomoFromServer(domoId) {
+	sendAjax('GET', '/getDomo', domoId, function (data) {
+		ReactDOM.render(React.createElement(DomoList, { domos: data.domos }), document.querySelector("#domos"));
+		console.log(data);
 	});
 };
 

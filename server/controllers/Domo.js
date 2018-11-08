@@ -27,7 +27,7 @@ const gamblePage = (req, res) => {
 
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
+  if (!req.body.name || !req.body.age || !req.body.balance) {
     return res.status(400).json({ error: 'RAWR! Both name, age, and balance are required' });
   }
 
@@ -60,6 +60,20 @@ const getDomos = (request, response) => {
 	const res = response;
 	
 	return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+		if(err) {
+			console.log(err);
+			return res.status(400).json({ error: 'An error occured' });
+		}
+		
+		return res.json({ domos: docs });
+	});
+};
+
+const getDomo = (request, response) => {
+	const req = request;
+	const res = response;
+	
+	return Domo.DomoModel.findById(req.session.account._id, (err, docs) => {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });
