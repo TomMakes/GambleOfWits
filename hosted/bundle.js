@@ -146,7 +146,7 @@ var toggleStickerTrade = function toggleStickerTrade(stickerId, tradeStatus) {
 	var dataPack = stickerId + "&" + tradeStatus;
 
 	sendAjax('GET', '/toggleTrade', dataPack, function (data) {
-		console.dir(data);
+		loadStickersFromServer();
 	});
 };
 

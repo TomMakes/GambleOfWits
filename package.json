@@ -24,7 +24,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Cody Van De Mark",
+  "author": "Thomas Ryszkiewicz",
   "license": "Apache 2.0",
   "dependencies": {
     "body-parser": "^1.15.0",

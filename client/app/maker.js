@@ -109,7 +109,7 @@ const toggleStickerTrade = (stickerId, tradeStatus) => {
 	let dataPack = stickerId + "&" + tradeStatus;
 
 	sendAjax('GET', '/toggleTrade', dataPack, (data) => {
-		console.dir(data);
+		loadStickersFromServer();
 	});
 };
 
