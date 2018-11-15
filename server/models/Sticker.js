@@ -62,6 +62,14 @@ StickerSchema.statics.findByID = (stickId, callback) => {
 	return StickerModel.findOne(search).select('name rarity tradable owner').exec(callback);
 };
 
+StickerSchema.statics.findByTradable = (tradableVal, callback) => {
+  const search = {
+    tradable: tradableVal,
+  };
+
+  return StickerModel.find(search).select('name rarity tradable').exec(callback);
+};
+
 StickerSchema.statics.toggleTradable = (stickId, tradeBool, callback) => {
 	//Switch tradability
 	let tradableVal;
