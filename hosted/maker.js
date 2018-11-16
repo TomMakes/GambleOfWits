@@ -6,7 +6,7 @@ var handleAddSticker = function handleAddSticker(e) {
 	$("#stickerMessage").animate({ width: 'hide' }, 350);
 
 	if ($("#stickerName").val() == '' || $("#stickerRarity").val() == '') {
-		handleError("RAWR! All fields are required");
+		handleError("All fields are required");
 		return false;
 	}
 
@@ -66,6 +66,7 @@ var StickerForm = function StickerForm(props) {
 };
 
 var StickerList = function StickerList(props) {
+	console.log("For sure I'm running Yay");
 	if (props.stickers.length == 0) {
 		return React.createElement(
 			"div",
@@ -155,7 +156,8 @@ var setup = function setup(csrf) {
 
 	ReactDOM.render(React.createElement(StickerList, { stickers: [] }), document.querySelector("#stickers"));
 
-	loadStickersFromServer();
+	console.log("I'm RUNNING!!");
+	//loadStickersFromServer();
 };
 
 var getToken = function getToken() {
@@ -167,29 +169,3 @@ var getToken = function getToken() {
 $(document).ready(function () {
 	getToken();
 });
-"use strict";
-
-var handleError = function handleError(message) {
-    $("#errorMessage").text(message);
-    $("#stickerMessage").animate({ width: 'toggle' }, 350);
-};
-
-var redirect = function redirect(response) {
-    $("#stickerMessage").animate({ width: 'hide' }, 350);
-    window.location = response.redirect;
-};
-
-var sendAjax = function sendAjax(type, action, data, success) {
-    $.ajax({
-        cache: false,
-        type: type,
-        url: action,
-        data: data,
-        dataType: "json",
-        success: success,
-        error: function error(xhr, status, _error) {
-            var messageObj = JSON.parse(xhr.responseText);
-            handleError(messageObj.error);
-        }
-    });
-};

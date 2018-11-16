@@ -4,7 +4,7 @@ const handleAddSticker = (e) => {
 	$("#stickerMessage").animate({width:'hide'}, 350);
 	
 	if($("#stickerName").val() == '' || $("#stickerRarity").val() == '') {
-		handleError("RAWR! All fields are required");
+		handleError("All fields are required");
 		return false;
 	}
 	
@@ -60,6 +60,7 @@ const StickerForm = (props) => {
 
 
 const StickerList = function(props) {
+	console.log("For sure I'm running Yay");
 	if(props.stickers.length == 0) {
 		return (
 			<div className="stickerList">
@@ -81,13 +82,13 @@ const StickerList = function(props) {
 			<button className="selectSticker" onClick={() => handleSelectSticker(sticker._id)}> Select Me </button>
 			<button className="tradeSticker" onClick={() => handleSelectTradeSticker(sticker._id, sticker.tradable)}> Trade Me </button>
 		</div>
-	);
+	); 
   });
 return (
 	<div className="stickerList">
 		{stickerNodes}
 	</div>
-	);
+	); 
 };
 
 const loadStickersFromServer = () => {
@@ -122,7 +123,8 @@ const setup = function(csrf) {
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 
 	);
 	
-	loadStickersFromServer();
+	console.log("I'm RUNNING!!");
+	//loadStickersFromServer();
 };
 
 const getToken = () => {

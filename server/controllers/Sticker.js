@@ -14,6 +14,8 @@ const makerPage = (req, res) => {
   });
 };
 
+
+
 const gamblePage = (req, res) => {
   Sticker.StickerModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -28,7 +30,7 @@ const gamblePage = (req, res) => {
 
 const makeSticker = (req, res) => {
   if (!req.body.name || !req.body.rarity) {
-    return res.status(400).json({ error: 'RAWR! Both name and rarity are required' });
+    return res.status(400).json({ error: 'Both name and rarity are required' });
   }
 	
   let pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);

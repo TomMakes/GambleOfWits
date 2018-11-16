@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <title>StickerMaker</title>
+  <title>Trader</title>
   <script crossorigin src="https://unpkg.com/react@15/dist/react.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
   <script crossorigin src="https://unpkg.com/prop-types/prop-types.min.js"></script>
@@ -15,18 +15,16 @@
   <nav><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
-  <section id="makeSticker">
-  </section>
   <div >
 	  <section class="button" id="makerUpgradeButton"><a  href="/upgrade">Go Pro!</a></section>
-	  <section class="button" id="makerTradeButton"><a  href="/trade">Trading Floor</a></section>
+	  <section class="button" id="makerTradeButton"><a  href="/maker">Go Back Home</a></section>
   </div>
-  <section id="stickers">
+  <section id="trades">
   </section>
   <div id="stickerMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
     <h3><span id="errorMessage"></span></h3><img id="sticker" src="assets/img/domo.png" alt="sticker"/>
   </div>
-  <script src="/assets/maker.js"></script>
-  <script src="/assets/helper.js"></script>
+    <script src="/assets/trader.js"></script>
+	<script src="/assets/helper.js"></script>
 </body>
 </html>

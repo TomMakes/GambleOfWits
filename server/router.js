@@ -6,6 +6,7 @@ const router = (app) => {
   app.get('/getStickers', mid.requiresLogin, controllers.Sticker.getStickers);
   app.get('/getSticker', mid.requiresLogin, controllers.Sticker.getSticker);
   app.get('/toggleTrade', mid.requiresLogin, controllers.Sticker.toggleTrade);
+  app.get('/getTradeStickers', mid.requiresLogin, controllers.Trade.getTradeStickers);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
@@ -13,6 +14,7 @@ const router = (app) => {
   app.get('/gamble', mid.requiresLogin, controllers.Sticker.gamblePage);
   app.get('/maker', mid.requiresLogin, controllers.Sticker.makerPage);
   app.post('/maker', mid.requiresLogin, controllers.Sticker.make);
+  app.get('/trade', mid.requiresLogin, controllers.Trade.tradePage);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

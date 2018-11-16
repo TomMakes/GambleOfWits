@@ -6,7 +6,7 @@ var handleLogin = function handleLogin(e) {
 	$("#stickerMessage").animate({ width: 'hide' }, 350);
 
 	if ($("#user").val() == '' || $("#pass").val() == '') {
-		handleError("RAWR! Username or password is empty");
+		handleError("Username or password is empty");
 		return false;
 	}
 
@@ -23,12 +23,12 @@ var handleSignup = function handleSignup(e) {
 	$("#stickerMessage").animate({ width: 'hide' }, 350);
 
 	if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-		handleError("RAWR! All fields are required");
+		handleError("All fields are required");
 		return false;
 	}
 
 	if ($("#pass").val() !== $("#pass2").val()) {
-		handleError("RAWR! Passwords do not match");
+		handleError("Passwords do not match");
 		return false;
 	}
 
@@ -132,29 +132,3 @@ var getToken = function getToken() {
 $(document).ready(function () {
 	getToken();
 });
-"use strict";
-
-var handleError = function handleError(message) {
-    $("#errorMessage").text(message);
-    $("#stickerMessage").animate({ width: 'toggle' }, 350);
-};
-
-var redirect = function redirect(response) {
-    $("#stickerMessage").animate({ width: 'hide' }, 350);
-    window.location = response.redirect;
-};
-
-var sendAjax = function sendAjax(type, action, data, success) {
-    $.ajax({
-        cache: false,
-        type: type,
-        url: action,
-        data: data,
-        dataType: "json",
-        success: success,
-        error: function error(xhr, status, _error) {
-            var messageObj = JSON.parse(xhr.responseText);
-            handleError(messageObj.error);
-        }
-    });
-};

@@ -18,7 +18,7 @@ const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/StickerTrader';
 
 mongoose.connect(dbURL, (err) => {
   if (err) {
-    console.log('could not connect to database');
+    console.log('Could not connect to database.');
     throw err;
   }
 });
