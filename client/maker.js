@@ -147,9 +147,9 @@ var getUserBalance = function getUserBalance() {
 
 const setup = function(csrf) {
 	
-	ReactDOM.render(
+	/*ReactDOM.render(
 		<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
-	);
+	);*/
 	
 	ReactDOM.render(
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 

@@ -79,18 +79,18 @@ const signup = (request, response) => {
 };
 
 const getUserInfo = (request, response) => {
-	const req = request;
-	const res = response;
-	
-	return Account.AccountModel.findById(req.session.account._id, (err, doc) => {
-		if(err) {
-			console.log(err);
-			return res.status(400).json({ error: 'An error occured' });
-		}
-		doc.createdDate = undefined;
-		doc.password = undefined;
-		doc.salt = undefined;
-		return res.json({ account: doc });
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findById(req.session.account._id, (err, doc) => {
+     if(err){
+       console.log(err);
+       return res.status(400).json({ error: 'An error occured' });
+	 }
+        doc.createdDate = undefined;
+        doc.password = undefined;
+        doc.salt = undefined;
+        return res.json({ account: doc });
 	});
 };
 

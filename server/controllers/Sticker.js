@@ -16,8 +16,7 @@ const makerPage = (req, res) => {
 
 const upgradePage = (req, res) => {
 
-    return res.render('upgrade', { csrfToken: req.csrfToken()});
-  
+  return res.render('upgrade', { csrfToken: req.csrfToken() });
 };
 
 const gamblePage = (req, res) => {
@@ -36,8 +35,8 @@ const makeSticker = (req, res) => {
   if (!req.body.name || !req.body.rarity) {
     return res.status(400).json({ error: 'Both name and rarity are required' });
   }
-	
-  let pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+
+  const pattern = new RegExp(/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
   if(pattern.test(req.body.name) || pattern.test(req.body.rarity)){
 	  return res.status(400).json({ error: 'No special characters allowed in names!' });
   }
@@ -66,51 +65,7 @@ const makeSticker = (req, res) => {
   return stickerPromise;
 };
 
-const generateStickers = (req, res) => {
-	let pickedSet = Math.floor(Math.random() * (5-0) + 0);
-	
-	//Create a number of possible sticker packs the user can recieve
-	let sets = [ [1,2,3,4,9], [2,4,6,8,10], [1,3,5,7,9], [3,5,6,7,8], [2,3,4,8,10] ];
-	
-	//Make array of the names and rarities of possible stickers. 
-	let names = ["Mailbox", "Tire", "Teacup", "Car", "Plane", "Coffee", 
-				 "Domo", "Clippy", "Dragon", "Horse"];
-	let rarities = [1,1,2,2,3,3,4,4,5,5];
-	
-	let url = ["mailbox.png", "tyre.png", "Teacup.png", "electric-car.png", "DdOo-Paper-plane.png"
-			  , "coffe.png", "domofaceNo.jpeg", "clippy.png", "GlitchSimplifiedCuteDragon.png", "blackhorse.png"];
-	
-	//Grab the specific array
-	var choice = sets[pickedSet];
-	console.dir(names[choice[1]]);
-	
-	//Create the stickers for user in database
-	for(var i = 0; i < choice.length; i++){
-		 const stickerData = {
-    		name: names[ (choice[i]-1) ],
-    		rarity: rarities[ (choice[i]-1) ],
-			url: "assets/img/" + url[ (choice[i]-1) ],
-			tradable: false,
-    		owner: req.session.account._id,
-  			};
-		const newSticker = new Sticker.StickerModel(stickerData);
-		
-		const stickerPromise = newSticker.save();
 
-	    //stickerPromise.then(() => res.json({ redirect: '/maker' }));
-	  
-	    stickerPromise.catch((err) => {
-	      console.log(err);
-	      if (err.code === 11000) {
-	        return res.status(400).json({ error: 'Sticker already exists.' });
-	      }
-	  
-  	    return res.status(400).json({ error: 'An error occured' });
-  	  });
-	}
-	
-	return getStickers(req, res);
-}
 
 const getStickers = (request, response) => {
 	const req = request;
@@ -145,6 +100,55 @@ const getSticker = (request, response) => {
 		return res.json({ sticker: docs });
 	});
 };
+
+const generateStickers = (req, res) => {
+  const pickedSet = Math.floor(Math.random() * (5 - 0) + 0);
+
+  // Create a number of possible sticker packs the user can recieve
+  const sets = [[1, 2, 3, 4, 9], [2, 4, 6, 8, 10],
+				[1, 3, 5, 7, 9], [3, 5, 6, 7, 8], [2, 3, 4, 8, 10]];
+	
+	//Make array of the names and rarities of possible stickers. 
+	const names = ["Mailbox", "Tire", "Teacup", "Car", "Plane", "Coffee", 
+				 "Domo", "Clippy", "Dragon", "Horse"];
+	const rarities = [1,1,2,2,3,3,4,4,5,5];
+	
+	const url = ["mailbox.png", "tyre.png", "Teacup.png", 
+			   "electric-car.png", "DdOo-Paper-plane.png"
+			  , "coffe.png", "domofaceNo.jpeg", "clippy.png", 
+			   "GlitchSimplifiedCuteDragon.png", "blackhorse.png"];
+	
+	//Grab the specific array
+	var choice = sets[pickedSet];
+	console.dir(names[choice[1]]);
+	
+	//Create the stickers for user in database
+	for(var i = 0; i < choice.length; i++){
+		 const stickerData = {
+    		name: names[ (choice[i]-1) ],
+    		rarity: rarities[ (choice[i]-1) ],
+			url: "assets/img/" + url[ (choice[i]-1) ],
+			tradable: false,
+    		owner: req.session.account._id,
+  			};
+		const newSticker = new Sticker.StickerModel(stickerData);
+		
+		const stickerPromise = newSticker.save();
+
+	    //stickerPromise.then(() => res.json({ redirect: '/maker' }));
+	  
+	    stickerPromise.catch((err) => {
+	      console.log(err);
+	      if (err.code === 11000) {
+	        return res.status(400).json({ error: 'Sticker already exists.' });
+	      }
+	  
+  	    return res.status(400).json({ error: 'An error occured' });
+  	  });
+	}
+	
+	return getStickers(req, res);
+}
 
 const toggleTradeSticker =  (request, response) => {
 	const req = request;

@@ -14,7 +14,6 @@ const tradePage = (req, res) => {
 };
 
 const getTradeStickers = (request, response) => {
-	const req = request;
 	const res = response;
 	
 	return Sticker.StickerModel.findByTradable(true, (err, docs) => {
