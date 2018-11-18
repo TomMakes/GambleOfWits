@@ -15,6 +15,16 @@ const handleAddSticker = (e) => {
 	return false;
 };
 
+function grabNewStickers() {
+	sendAjax('GET', '/generateStickers', null, (data) => {
+		ReactDOM.render(
+			<StickerList stickers={data.stickers} />, document.querySelector("#stickers")
+		);
+			loadStickersFromServer();
+			console.log(data);
+	});
+}
+
 function handleSelectSticker(id) {
 	event.preventDefault();
 
@@ -58,9 +68,21 @@ const StickerForm = (props) => {
 	);
 }
 
+const AccountInfo = (props) => {
+	console.log("Sending props info");
+	console.dir(props.account);
+	console.dir(props.account.account);
+	return (
+	<div>
+		<h3> Username: {props.account.account.username} <span> <br /> </span>
+			 Balance: {props.account.account.balance}</h3>
+			<button className="generateStickers" onClick={() => grabNewStickers()}> Open Sticker Pack! </button>
+	</div>
+	);
+}
+
 
 const StickerList = function(props) {
-	console.log("For sure I'm running Yay");
 	if(props.stickers.length == 0) {
 		return (
 			<div className="stickerList">
@@ -75,15 +97,15 @@ const StickerList = function(props) {
 		  stickerTradeStatus = "True";
 	return(
 		<div key={sticker._id} className="sticker">
-			<img src="/assets/img/domoface.jpeg" alt="domo Face" className="stickerFace" />
+			<img src= {sticker.url} alt="domo Face" className="stickerFace" />
 			<h3 className="stickerName"> Name: {sticker.name} </h3>
 			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
 			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
-			<button className="selectSticker" onClick={() => handleSelectSticker(sticker._id)}> Select Me </button>
+			<button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
 			<button className="tradeSticker" onClick={() => handleSelectTradeSticker(sticker._id, sticker.tradable)}> Trade Me </button>
 		</div>
 	); 
-  });
+  }); //handleSelectSticker(sticker._id)
 return (
 	<div className="stickerList">
 		{stickerNodes}
@@ -114,7 +136,17 @@ const toggleStickerTrade = (stickerId, tradeStatus) => {
 	});
 };
 
+var getUserBalance = function getUserBalance() {
+	sendAjax('GET', '/getUserInfo', null, function (data) {
+		ReactDOM.render(
+			<AccountInfo account={data} />, document.querySelector(".accountInfo")
+		);
+		console.log(data);
+	});
+};
+
 const setup = function(csrf) {
+	
 	ReactDOM.render(
 		<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
 	);
@@ -123,8 +155,8 @@ const setup = function(csrf) {
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 
 	);
 	
-	console.log("I'm RUNNING!!");
-	//loadStickersFromServer();
+	getUserBalance();
+	loadStickersFromServer();
 };
 
 const getToken = () => {

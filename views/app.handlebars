@@ -12,19 +12,26 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+  <nav>
+	<section class="float-middle">
+	  <section class="button" id="makerUpgradeButton"><a  href="/upgrade">Go Pro!</a></section>
+	  <section class="button" id="makerTradeButton"><a  href="/trade">Trading Floor</a>
+	  </section> 
+	  </section>
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
+  <section class="accountInfo">	
+  </section>
+	
   <section id="makeSticker">
   </section>
   <div >
-	  <section class="button" id="makerUpgradeButton"><a  href="/upgrade">Go Pro!</a></section>
-	  <section class="button" id="makerTradeButton"><a  href="/trade">Trading Floor</a></section>
+	  
   </div>
   <section id="stickers">
   </section>
   <div id="stickerMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3><img id="sticker" src="assets/img/domo.png" alt="sticker"/>
+    <h3><span id="errorMessage"></span></h3><img id="sticker" src="assets/img/Clippy.png" alt="sticker"/>
   </div>
   <script src="/assets/maker.js"></script>
   <script src="/assets/helper.js"></script>

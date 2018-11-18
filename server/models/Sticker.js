@@ -28,22 +28,34 @@ const StickerSchema = new mongoose.Schema({
     required: true,
     ref: 'Account',
   },
-	
-  tradable:{
-	type: Boolean,
-	required: true,
+
+  tradable: {
+    type: Boolean,
+    required: true,
+  },
+
+  balance: {
+	  type: Number,
+	  min: 0,
+	  default: 0,
   },
 
   createdData: {
     type: Date,
     default: Date.now,
   },
+	
+  url: {
+	type: String,
+	default: "assets/img/domo.png",
+  }
 });
 
 StickerSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   rarity: doc.rarity,
   tradable: doc.tradable,
+  balance: doc.balance,
 });
 
 StickerSchema.statics.findByOwner = (ownerId, callback) => {
@@ -51,7 +63,7 @@ StickerSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return StickerModel.find(search).select('name rarity tradable').exec(callback);
+  return StickerModel.find(search).select('name rarity tradable balance url').exec(callback);
 };
 
 StickerSchema.statics.findByID = (stickId, callback) => {
@@ -59,7 +71,7 @@ StickerSchema.statics.findByID = (stickId, callback) => {
 		_id: convertId(stickId),
 	};
 	
-	return StickerModel.findOne(search).select('name rarity tradable owner').exec(callback);
+	return StickerModel.findOne(search).select('name rarity tradable balance url owner').exec(callback);
 };
 
 StickerSchema.statics.findByTradable = (tradableVal, callback) => {
@@ -67,7 +79,7 @@ StickerSchema.statics.findByTradable = (tradableVal, callback) => {
     tradable: tradableVal,
   };
 
-  return StickerModel.find(search).select('name rarity tradable').exec(callback);
+  return StickerModel.find(search).select('name rarity tradable balance url').exec(callback);
 };
 
 StickerSchema.statics.toggleTradable = (stickId, tradeBool, callback) => {
@@ -82,7 +94,7 @@ StickerSchema.statics.toggleTradable = (stickId, tradeBool, callback) => {
 	const setTradable = {
 		$set: {tradable: tradableVal} 
 	}; 
-	let modelToggled = StickerModel.findOne(search).select('name rarity tradable owner').exec(function(err, docs) {
+	let modelToggled = StickerModel.findOne(search).select('name rarity tradable url balance owner').exec(function(err, docs) {
 		if(err) {
 			console.log(err);
 			return res.status(400).json({ error: 'An error occured' });

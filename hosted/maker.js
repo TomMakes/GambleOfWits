@@ -17,6 +17,14 @@ var handleAddSticker = function handleAddSticker(e) {
 	return false;
 };
 
+function grabNewStickers() {
+	sendAjax('GET', '/generateStickers', null, function (data) {
+		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
+		loadStickersFromServer();
+		console.log(data);
+	});
+}
+
 function handleSelectSticker(id) {
 	event.preventDefault();
 
@@ -65,8 +73,40 @@ var StickerForm = function StickerForm(props) {
 	);
 };
 
+var AccountInfo = function AccountInfo(props) {
+	console.log("Sending props info");
+	console.dir(props.account);
+	console.dir(props.account.account);
+	return React.createElement(
+		"div",
+		null,
+		React.createElement(
+			"h3",
+			null,
+			" Username: ",
+			props.account.account.username,
+			" ",
+			React.createElement(
+				"span",
+				null,
+				" ",
+				React.createElement("br", null),
+				" "
+			),
+			"Balance: ",
+			props.account.account.balance
+		),
+		React.createElement(
+			"button",
+			{ className: "generateStickers", onClick: function onClick() {
+					return grabNewStickers();
+				} },
+			" Open Sticker Pack! "
+		)
+	);
+};
+
 var StickerList = function StickerList(props) {
-	console.log("For sure I'm running Yay");
 	if (props.stickers.length == 0) {
 		return React.createElement(
 			"div",
@@ -85,7 +125,7 @@ var StickerList = function StickerList(props) {
 		return React.createElement(
 			"div",
 			{ key: sticker._id, className: "sticker" },
-			React.createElement("img", { src: "/assets/img/domoface.jpeg", alt: "domo Face", className: "stickerFace" }),
+			React.createElement("img", { src: sticker.url, alt: "domo Face", className: "stickerFace" }),
 			React.createElement(
 				"h3",
 				{ className: "stickerName" },
@@ -110,7 +150,7 @@ var StickerList = function StickerList(props) {
 			React.createElement(
 				"button",
 				{ className: "selectSticker", onClick: function onClick() {
-						return handleSelectSticker(sticker._id);
+						return getUserBalance();
 					} },
 				" Select Me "
 			),
@@ -122,7 +162,7 @@ var StickerList = function StickerList(props) {
 				" Trade Me "
 			)
 		);
-	});
+	}); //handleSelectSticker(sticker._id)
 	return React.createElement(
 		"div",
 		{ className: "stickerList" },
@@ -151,13 +191,21 @@ var toggleStickerTrade = function toggleStickerTrade(stickerId, tradeStatus) {
 	});
 };
 
+var getUserBalance = function getUserBalance() {
+	sendAjax('GET', '/getUserInfo', null, function (data) {
+		ReactDOM.render(React.createElement(AccountInfo, { account: data }), document.querySelector(".accountInfo"));
+		console.log(data);
+	});
+};
+
 var setup = function setup(csrf) {
+
 	ReactDOM.render(React.createElement(StickerForm, { csrf: csrf }), document.querySelector("#makeSticker"));
 
 	ReactDOM.render(React.createElement(StickerList, { stickers: [] }), document.querySelector("#stickers"));
 
-	console.log("I'm RUNNING!!");
-	//loadStickersFromServer();
+	getUserBalance();
+	loadStickersFromServer();
 };
 
 var getToken = function getToken() {

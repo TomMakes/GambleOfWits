@@ -78,6 +78,22 @@ const signup = (request, response) => {
   });
 };
 
+const getUserInfo = (request, response) => {
+	const req = request;
+	const res = response;
+	
+	return Account.AccountModel.findById(req.session.account._id, (err, doc) => {
+		if(err) {
+			console.log(err);
+			return res.status(400).json({ error: 'An error occured' });
+		}
+		doc.createdDate = undefined;
+		doc.password = undefined;
+		doc.salt = undefined;
+		return res.json({ account: doc });
+	});
+};
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -92,4 +108,5 @@ module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.getUserInfo = getUserInfo;
 module.exports.getToken = getToken;

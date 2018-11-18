@@ -8,6 +8,10 @@ const iterations = 10000;
 const saltLength = 64;
 const keyLength = 64;
 
+// mongoose.Types.ObjectID is a function that
+// converts string ID to real mongo ID
+const convertId = mongoose.Types.ObjectId;
+
 const AccountSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -24,6 +28,16 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  balance: {
+    type: Number,
+    min: 0,
+    default: 100,
+  },
+  stickerPacks: {
+    type: Number,
+    min: 0,
+	default: 1,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -34,6 +48,7 @@ AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
+  balance: doc.balance,
 });
 
 const validatePassword = (doc, password, callback) => {
@@ -45,6 +60,14 @@ const validatePassword = (doc, password, callback) => {
     }
     return callback(true);
   });
+};
+
+AccountSchema.statics.findByUserID = (ownerId, callback) => {
+  const search = {
+    owner: convertId(ownerId),
+  };
+
+  return AccountModel.find(search).select('username balance').exec(callback);
 };
 
 AccountSchema.statics.findByUsername = (name, callback) => {

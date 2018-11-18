@@ -2,13 +2,20 @@
 
 var loadTradeStickersFromServer = function loadTradeStickersFromServer() {
 	sendAjax('GET', '/getTradeStickers', null, function (data) {
-		ReactDOM.render(React.createElement('tradeStickers', { stickers: data.stickers }), document.querySelector("#trades"));
+		ReactDOM.render(React.createElement(TradeStickers, { stickers: data.stickers }), document.querySelector("#trades"));
 		console.log(data);
 	});
 };
 
+function handlePurchaseSticker(stickId) {
+
+	sendAjax('GET', '/changeOwner', stickId, function (result) {
+		console.dir(result);
+		loadTradeStickersFromServer();
+	});
+}
+
 var TradeStickers = function TradeStickers(props) {
-	console.log("I swear I'm running");
 	if (props.stickers.length == 0) {
 		return React.createElement(
 			'div',
@@ -25,7 +32,7 @@ var TradeStickers = function TradeStickers(props) {
 		return React.createElement(
 			'div',
 			{ key: sticker._id, className: 'sticker' },
-			React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domo Face', className: 'stickerFace' }),
+			React.createElement('img', { src: sticker.url, alt: 'domo Face', className: 'stickerFace' }),
 			React.createElement(
 				'h3',
 				{ className: 'stickerName' },
@@ -42,24 +49,17 @@ var TradeStickers = function TradeStickers(props) {
 			),
 			React.createElement(
 				'h3',
-				{ className: 'stickerTradable' },
-				' Tradable: ',
-				stickerTradeStatus,
+				{ className: 'stickerPrice' },
+				' Price: ',
+				sticker.balance,
 				' '
 			),
 			React.createElement(
 				'button',
 				{ className: 'selectSticker', onClick: function onClick() {
-						return handleSelectSticker(sticker._id);
+						return handlePurchaseSticker(sticker._id);
 					} },
-				' Select Me '
-			),
-			React.createElement(
-				'button',
-				{ className: 'tradeSticker', onClick: function onClick() {
-						return handleSelectTradeSticker(sticker._id, sticker.tradable);
-					} },
-				' Trade Me '
+				' Buy Me '
 			)
 		);
 	});
@@ -74,7 +74,6 @@ var setup = function setup(csrf) {
 
 	ReactDOM.render(React.createElement(TradeStickers, { stickers: [] }), document.querySelector("#trades"));
 
-	console.log("wee I'm setup and I'm RUNNING!!");
 	loadTradeStickersFromServer();
 };
 
