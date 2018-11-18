@@ -35,20 +35,20 @@ const StickerSchema = new mongoose.Schema({
   },
 
   balance: {
-	  type: Number,
-	  min: 0,
-	  default: 0,
+    type: Number,
+    min: 0,
+    default: 0,
   },
 
   createdData: {
     type: Date,
     default: Date.now,
   },
-	
+
   url: {
-	type: String,
-	default: "assets/img/domo.png",
-  }
+    type: String,
+    default: 'assets/img/domo.png',
+  },
 });
 
 StickerSchema.statics.toAPI = (doc) => ({

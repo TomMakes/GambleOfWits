@@ -159,7 +159,6 @@ const toggleTradeSticker =  (request, response) => {
 	//Take only the first variable as it's the domoId
 	reqId = reqId[1].split("&");
 	let changedModel = {};
-	let parsedModel = {};
 	
 	Sticker.StickerModel.findByID(reqId[0], (err, docs) => {
 		if(err) {
@@ -175,9 +174,9 @@ const toggleTradeSticker =  (request, response) => {
 
   		stickerPromise.then(() => res.json({ redirect: '/maker' }));
 		
-		stickerPromise.catch((err) => {
-    		console.log(err);
-    		if (err.code === 11000) {
+		stickerPromise.catch((err2) => {
+    		console.log(err2);
+    		if (err2.code === 11000) {
       			return res.status(400).json({ error: 'Sticker already exists.' });
     		}
 
@@ -205,7 +204,6 @@ const changeOwner =  (request, response) => {
 	//Take only the first variable as it's the domoId
 	reqId = reqId[1].split("&");
 	let changedModel = {};
-	let parsedModel = {};
 	
 	Sticker.StickerModel.findByID(reqId[0], (err, docs) => {
 		if(err) {
@@ -222,9 +220,9 @@ const changeOwner =  (request, response) => {
 
   		stickerPromise.then(() => res.json({ redirect: '/trade' }));
 		
-		stickerPromise.catch((err) => {
-    		console.log(err);
-    		if (err.code === 11000) {
+		stickerPromise.catch((err2) => {
+    		console.log(err2);
+    		if (err2.code === 11000) {
       			return res.status(400).json({ error: 'Sticker already exists.' });
     		}
 
