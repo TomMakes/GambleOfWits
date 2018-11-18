@@ -8,9 +8,9 @@ const handleAddSticker = (e) => {
 		return false;
 	}
 	
-	sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function() {
+	/*sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function() {
 		loadStickersFromServer();
-	});
+	}); */
 	
 	return false;
 };
@@ -48,7 +48,7 @@ function handleSelectTradeSticker(id, tradeStatus) {
 	return false;
 }
 
-const StickerForm = (props) => {
+/*const StickerForm = (props) => {
 	return (
 	<form id="stickerForm"
 		onSubmit={handleAddSticker}
@@ -66,7 +66,7 @@ const StickerForm = (props) => {
 		<input className="makeStickerSubmit" type="submit" value="Make Sticker" />
 	</form>
 	);
-}
+} */
 
 const AccountInfo = (props) => {
 	console.log("Sending props info");
