@@ -83,15 +83,16 @@ const getUserInfo = (request, response) => {
   const res = response;
 
   return Account.AccountModel.findById(req.session.account._id, (err, doc) => {
-     if(err){
-       console.log(err);
-       return res.status(400).json({ error: 'An error occured' });
-	 }
-        doc.createdDate = undefined;
-        doc.password = undefined;
-        doc.salt = undefined;
-        return res.json({ account: doc });
-	});
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+    let idInfo = doc;
+    idInfo.createdDate = undefined;
+    idInfo.password = undefined;
+    idInfo.salt = undefined;
+    return res.json({ account: idInfo });
+  });
 };
 
 const getToken = (request, response) => {

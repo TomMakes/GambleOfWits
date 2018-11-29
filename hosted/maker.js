@@ -10,9 +10,9 @@ var handleAddSticker = function handleAddSticker(e) {
 		return false;
 	}
 
-	sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function () {
-		loadStickersFromServer();
-	});
+	/*sendAjax('POST', $("#stickerForm").attr("action"), $("#stickerForm").serialize(), function() {
+ 	loadStickersFromServer();
+ }); */
 
 	return false;
 };
@@ -46,32 +46,25 @@ function handleSelectTradeSticker(id, tradeStatus) {
 	return false;
 }
 
-var StickerForm = function StickerForm(props) {
-	return React.createElement(
-		"form",
-		{ id: "stickerForm",
-			onSubmit: handleAddSticker,
-			name: "stickerForm",
-			action: "/maker",
-			method: "POST",
-			className: "stickerForm"
-		},
-		React.createElement(
-			"label",
-			{ htmlFor: "name" },
-			"Name: "
-		),
-		React.createElement("input", { id: "stickerName", type: "text", name: "name", placeholder: "Sticker Name" }),
-		React.createElement(
-			"label",
-			{ htmlFor: "rarity" },
-			"Rarity: "
-		),
-		React.createElement("input", { id: "stickerRarity", type: "text", name: "rarity", placeholder: "Sticker Rarity" }),
-		React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-		React.createElement("input", { className: "makeStickerSubmit", type: "submit", value: "Make Sticker" })
+/*const StickerForm = (props) => {
+	return (
+	<form id="stickerForm"
+		onSubmit={handleAddSticker}
+		name="stickerForm"
+		action="/maker"
+		method="POST"
+		className="stickerForm"
+		>
+		
+		<label htmlFor="name">Name: </label>
+		<input id="stickerName" type="text" name="name" placeholder="Sticker Name"/>
+		<label htmlFor="rarity">Rarity: </label>
+		<input id="stickerRarity" type="text" name="rarity" placeholder="Sticker Rarity"/>
+		<input type="hidden" name="_csrf" value={props.csrf} />
+		<input className="makeStickerSubmit" type="submit" value="Make Sticker" />
+	</form>
 	);
-};
+} */
 
 var AccountInfo = function AccountInfo(props) {
 	console.log("Sending props info");
@@ -200,7 +193,9 @@ var getUserBalance = function getUserBalance() {
 
 var setup = function setup(csrf) {
 
-	ReactDOM.render(React.createElement(StickerForm, { csrf: csrf }), document.querySelector("#makeSticker"));
+	/*ReactDOM.render(
+ 	<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
+ );*/
 
 	ReactDOM.render(React.createElement(StickerList, { stickers: [] }), document.querySelector("#stickers"));
 
