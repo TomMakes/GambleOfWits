@@ -15,6 +15,23 @@ const handleAddSticker = (e) => {
 	return false;
 };
 
+const handleSelectTradeSticker = (e) => {
+	e.preventDefault();
+	
+	$("#stickerMessage").animate({width:'hide'}, 350);
+	
+	if(isNaN($("#stickerPrice").val())) {
+		handleError("The value input is not a number");
+		return false;
+	}
+	
+	// Hide the trade menu since it's done
+    const tradeMenu = document.getElementById("stickerTradeMenuDiv");
+    tradeMenu.classList.add("hidden");
+  
+	return false;
+};
+
 function grabNewStickers() {
 	sendAjax('GET', '/generateStickers', null, (data) => {
 		ReactDOM.render(
@@ -34,7 +51,7 @@ function handleSelectSticker(id) {
 	return false;
 };
 
-function handleSelectTradeSticker(id, tradeStatus) {
+function handleSelectTradeStickerOLD(id, tradeStatus) {
 	event.preventDefault();
 
 	console.log("Trade Toggle Sticker");
@@ -50,29 +67,28 @@ function handleSelectTradeSticker(id, tradeStatus) {
 
 // Menu for the putting in price to trade sticker for.
 function RenderStickerTradeMenu(stickerData) {
+  //Unhide the trade menu if it has been brought up before.
+  const tradeMenu = document.getElementById("stickerTradeMenuDiv");
+  tradeMenu.classList.remove("hidden");
   ReactDOM.render(
-    <StickerTradeMenu sticker = {stickerData} />, document.querySelector("#stickerTradeMenu")
+    <StickerTradeMenu sticker = {stickerData} />, document.querySelector("#stickerTradeMenuDiv")
   );
 }
 
 const StickerTradeMenu = (props) => {
   return (
-    <div>
-		<h3> How much do you want to trade {props.sticker.name} for?<span> <br /> </span>
-         <form id="stickerTradeMenu"
+    <form id="stickerTradeMenu"
 	    	onSubmit={handleSelectTradeSticker}
 	    	name="stickerTradeMenu"
 	    	action="/maker"
 	    	method="GET"
 	    	>
-	    	
+	    	How much do you want to trade {props.sticker.name} for? <span> <br /> <br /> </span>
 	    	<label htmlFor="price">Price: </label>
-	    	<input id="stickerName" type="text" name="name" placeholder="Sticker Name"/>
-	    	<input type="hidden" name="_csrf" value={props.csrf} />
-	    	<input className="makeStickerSubmit" type="submit" value="Make Sticker" />
-	    </form>
-	</div>
-  )
+	    	<input id="stickerPrice" type="text" name="price" placeholder="Sticker Price"/>
+	    	<input className="tradeStickerSubmit" type="submit" value="Trade Sticker" />
+    </form>
+  );
 }
 
 /*const StickerForm = (props) => {

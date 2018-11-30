@@ -17,6 +17,23 @@ var handleAddSticker = function handleAddSticker(e) {
 	return false;
 };
 
+var handleSelectTradeSticker = function handleSelectTradeSticker(e) {
+	e.preventDefault();
+
+	$("#stickerMessage").animate({ width: 'hide' }, 350);
+
+	if (isNaN($("#stickerPrice").val())) {
+		handleError("The value input is not a number");
+		return false;
+	}
+
+	// Hide the trade menu since it's done
+	var tradeMenu = document.getElementById("stickerTradeMenuDiv");
+	tradeMenu.classList.add("hidden");
+
+	return false;
+};
+
 function grabNewStickers() {
 	sendAjax('GET', '/generateStickers', null, function (data) {
 		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
@@ -34,7 +51,7 @@ function handleSelectSticker(id) {
 	return false;
 };
 
-function handleSelectTradeSticker(id, tradeStatus) {
+function handleSelectTradeStickerOLD(id, tradeStatus) {
 	event.preventDefault();
 
 	console.log("Trade Toggle Sticker");
@@ -48,53 +65,40 @@ function handleSelectTradeSticker(id, tradeStatus) {
 
 // Menu for the putting in price to trade sticker for.
 function RenderStickerTradeMenu(stickerData) {
-	ReactDOM.render(React.createElement(StickerTradeMenu, { sticker: stickerData }), document.querySelector("#stickerTradeMenu"));
+	//Unhide the trade menu if it has been brought up before.
+	var tradeMenu = document.getElementById("stickerTradeMenuDiv");
+	tradeMenu.classList.remove("hidden");
+	ReactDOM.render(React.createElement(StickerTradeMenu, { sticker: stickerData }), document.querySelector("#stickerTradeMenuDiv"));
 }
 
 var StickerTradeMenu = function StickerTradeMenu(props) {
 	return React.createElement(
-		"div",
-		null,
+		"form",
+		{ id: "stickerTradeMenu",
+			onSubmit: handleSelectTradeSticker,
+			name: "stickerTradeMenu",
+			action: "/maker",
+			method: "GET"
+		},
+		"How much do you want to trade ",
+		props.sticker.name,
+		" for? ",
 		React.createElement(
-			"h3",
+			"span",
 			null,
-			" How much do you want to trade ",
-			props.sticker.name,
-			" for?",
-			React.createElement(
-				"span",
-				null,
-				" ",
-				React.createElement("br", null),
-				" "
-			),
-			"Balance: ",
-			props.account.account.balance
+			" ",
+			React.createElement("br", null),
+			" ",
+			React.createElement("br", null),
+			" "
 		),
 		React.createElement(
-			"button",
-			{ className: "generateStickers", onClick: function onClick() {
-					return grabNewStickers();
-				} },
-			" Open Sticker Pack! "
+			"label",
+			{ htmlFor: "price" },
+			"Price: "
 		),
-		React.createElement(
-			"form",
-			{ id: "stickerTradeMenu",
-				onSubmit: handleSelectTradeSticker,
-				name: "stickerTradeMenu",
-				action: "/maker",
-				method: "GET"
-			},
-			React.createElement(
-				"label",
-				{ htmlFor: "price" },
-				"Price: "
-			),
-			React.createElement("input", { id: "stickerName", type: "text", name: "name", placeholder: "Sticker Name" }),
-			React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
-			React.createElement("input", { className: "makeStickerSubmit", type: "submit", value: "Make Sticker" })
-		)
+		React.createElement("input", { id: "stickerPrice", type: "text", name: "price", placeholder: "Sticker Price" }),
+		React.createElement("input", { className: "tradeStickerSubmit", type: "submit", value: "Trade Sticker" })
 	);
 };
 
