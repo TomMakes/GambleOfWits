@@ -7,6 +7,10 @@ html, body {
 	background-color: #A9BCD0;
 }
 
+.hidden {
+  display: none;
+}
+
 #logo {
     height: 40px;
     width: 40;
@@ -356,6 +360,27 @@ h3.stickersTradable {
     border-top-right-radius: 15px;
 }
 
+#stickerTradeMenuDiv {
+    position: fixed;
+    margin:auto;
+	width: 100%;
+    height: 100%;
+	background-color: rgb(67, 68, 68, 0.8);
+	padding: 5px;
+	padding-bottom: 10px;
+}
+
+#stickerTradeMenu {
+  margin:auto;
+  border: 2px solid #878b91;
+  border-radius: 15px;
+  background-color: #afb4bc;
+  width: 50%;
+  padding: 15px;
+  margin-top: 25%;
+  text-align: center;
+  font-size: 1.2em;
+}
 
 
 .float-middle {

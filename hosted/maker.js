@@ -46,6 +46,58 @@ function handleSelectTradeSticker(id, tradeStatus) {
 	return false;
 }
 
+// Menu for the putting in price to trade sticker for.
+function RenderStickerTradeMenu(stickerData) {
+	ReactDOM.render(React.createElement(StickerTradeMenu, { sticker: stickerData }), document.querySelector("#stickerTradeMenu"));
+}
+
+var StickerTradeMenu = function StickerTradeMenu(props) {
+	return React.createElement(
+		"div",
+		null,
+		React.createElement(
+			"h3",
+			null,
+			" How much do you want to trade ",
+			props.sticker.name,
+			" for?",
+			React.createElement(
+				"span",
+				null,
+				" ",
+				React.createElement("br", null),
+				" "
+			),
+			"Balance: ",
+			props.account.account.balance
+		),
+		React.createElement(
+			"button",
+			{ className: "generateStickers", onClick: function onClick() {
+					return grabNewStickers();
+				} },
+			" Open Sticker Pack! "
+		),
+		React.createElement(
+			"form",
+			{ id: "stickerTradeMenu",
+				onSubmit: handleSelectTradeSticker,
+				name: "stickerTradeMenu",
+				action: "/maker",
+				method: "GET"
+			},
+			React.createElement(
+				"label",
+				{ htmlFor: "price" },
+				"Price: "
+			),
+			React.createElement("input", { id: "stickerName", type: "text", name: "name", placeholder: "Sticker Name" }),
+			React.createElement("input", { type: "hidden", name: "_csrf", value: props.csrf }),
+			React.createElement("input", { className: "makeStickerSubmit", type: "submit", value: "Make Sticker" })
+		)
+	);
+};
+
 /*const StickerForm = (props) => {
 	return (
 	<form id="stickerForm"
@@ -150,12 +202,12 @@ var StickerList = function StickerList(props) {
 			React.createElement(
 				"button",
 				{ className: "tradeSticker", onClick: function onClick() {
-						return handleSelectTradeSticker(sticker._id, sticker.tradable);
+						return RenderStickerTradeMenu(sticker);
 					} },
 				" Trade Me "
 			)
 		);
-	}); //handleSelectSticker(sticker._id)
+	}); // old solution for tradeSticker button. handleSelectSticker(sticker._id)
 	return React.createElement(
 		"div",
 		{ className: "stickerList" },

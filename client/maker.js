@@ -48,6 +48,33 @@ function handleSelectTradeSticker(id, tradeStatus) {
 	return false;
 }
 
+// Menu for the putting in price to trade sticker for.
+function RenderStickerTradeMenu(stickerData) {
+  ReactDOM.render(
+    <StickerTradeMenu sticker = {stickerData} />, document.querySelector("#stickerTradeMenu")
+  );
+}
+
+const StickerTradeMenu = (props) => {
+  return (
+    <div>
+		<h3> How much do you want to trade {props.sticker.name} for?<span> <br /> </span>
+         <form id="stickerTradeMenu"
+	    	onSubmit={handleSelectTradeSticker}
+	    	name="stickerTradeMenu"
+	    	action="/maker"
+	    	method="GET"
+	    	>
+	    	
+	    	<label htmlFor="price">Price: </label>
+	    	<input id="stickerName" type="text" name="name" placeholder="Sticker Name"/>
+	    	<input type="hidden" name="_csrf" value={props.csrf} />
+	    	<input className="makeStickerSubmit" type="submit" value="Make Sticker" />
+	    </form>
+	</div>
+  )
+}
+
 /*const StickerForm = (props) => {
 	return (
 	<form id="stickerForm"
@@ -102,10 +129,11 @@ const StickerList = function(props) {
 			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
 			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
 			<button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
-			<button className="tradeSticker" onClick={() => handleSelectTradeSticker(sticker._id, sticker.tradable)}> Trade Me </button>
+			<button className="tradeSticker" onClick={() => RenderStickerTradeMenu(sticker)}> Trade Me </button>
+            
 		</div>
 	); 
-  }); //handleSelectSticker(sticker._id)
+  }); // old solution for tradeSticker button. handleSelectSticker(sticker._id)
 return (
 	<div className="stickerList">
 		{stickerNodes}

@@ -12,6 +12,22 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
+    <div id="stickerTradeMenuDiv" >
+	  
+         <form id="stickerTradeMenu"
+	    	onSubmit={handleSelectTradeSticker}
+	    	name="stickerTradeMenu"
+	    	action="/maker"
+	    	method="GET"
+	    	>
+	    	How much do you want to trade {props.sticker.name} for? <span> <br /> <br /> </span>
+	    	<label htmlFor="price">Price: </label>
+	    	<input id="stickerPrice" type="text" name="price" placeholder="Sticker Price"/>
+	    	<input type="hidden" name="_csrf" value={props.csrf} />
+	    	<input className="tradeStickerSubmit" type="submit" value="Trade Sticker" />
+	    </form>
+      
+    </div>
   <nav>
 	<section class="float-middle">
 	  <section class="button" id="makerUpgradeButton"><a  href="/upgrade">Go Pro!</a></section>
@@ -25,9 +41,7 @@
 	
   <section id="makeSticker">
   </section>
-  <div >
-	  
-  </div>
+
   <section id="stickers">
   </section>
   <div id="stickerMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
