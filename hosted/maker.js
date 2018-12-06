@@ -31,6 +31,15 @@ var handleSelectTradeSticker = function handleSelectTradeSticker(e) {
 	var tradeMenu = document.getElementById("stickerTradeMenuDiv");
 	tradeMenu.classList.add("hidden");
 
+	// Run a function that takes the sticker ID and price of sticker, 
+	// and updates the Sticker by setting tradable true and price.
+
+	// make sure I am sending the appropriate values to the function
+	console.log("StickerID " + $("#tradedStickerID").val() + "  And sticker price of " + $("#stickerPrice").val());
+
+	// trade the sticker passing in id, what to change trade status to, and the price
+	toggleStickerTrade($("#tradedStickerID").val(), '1', $("#stickerPrice").val());
+
 	return false;
 };
 
@@ -50,6 +59,13 @@ function handleSelectSticker(id) {
 
 	return false;
 };
+
+// Stub function which is going to be for removing a sticker from the tradable area.
+// This function makes tradable false, and sets price of sticker to 0.
+function removeFromTradingFloor(sticker) {
+	// stickerID, trade status (0 is false), price
+	toggleStickerTrade(sticker._id, '0', '0');
+}
 
 function handleSelectTradeStickerOLD(id, tradeStatus) {
 	event.preventDefault();
@@ -98,6 +114,7 @@ var StickerTradeMenu = function StickerTradeMenu(props) {
 			"Price: "
 		),
 		React.createElement("input", { id: "stickerPrice", type: "text", name: "price", placeholder: "Sticker Price" }),
+		React.createElement("input", { id: "tradedStickerID", type: "hidden", name: "stickerID", value: props.sticker._id }),
 		React.createElement("input", { className: "tradeStickerSubmit", type: "submit", value: "Trade Sticker" })
 	);
 };
@@ -170,7 +187,50 @@ var StickerList = function StickerList(props) {
 
 	var stickerNodes = props.stickers.map(function (sticker) {
 		var stickerTradeStatus = "False";
-		if (sticker.tradable) stickerTradeStatus = "True";
+		if (sticker.tradable) {
+			stickerTradeStatus = "True";
+			return React.createElement(
+				"div",
+				{ key: sticker._id, className: "sticker" },
+				React.createElement("img", { src: sticker.url, alt: "domo Face", className: "stickerFace" }),
+				React.createElement(
+					"h3",
+					{ className: "stickerName" },
+					" Name: ",
+					sticker.name,
+					" "
+				),
+				React.createElement(
+					"h3",
+					{ className: "stickerRarity" },
+					" Rarity: ",
+					sticker.rarity,
+					" "
+				),
+				React.createElement(
+					"h3",
+					{ className: "stickerTradable" },
+					" Tradable: ",
+					stickerTradeStatus,
+					" "
+				),
+				React.createElement(
+					"button",
+					{ className: "selectSticker", onClick: function onClick() {
+							return getUserBalance();
+						} },
+					" Select Me "
+				),
+				React.createElement(
+					"button",
+					{ className: "tradeSticker", onClick: function onClick() {
+							return removeFromTradingFloor(sticker);
+						} },
+					" Take off Trading Floor "
+				)
+			);
+		}
+
 		return React.createElement(
 			"div",
 			{ key: sticker._id, className: "sticker" },
@@ -232,8 +292,8 @@ var loadStickerFromServer = function loadStickerFromServer(stickerId) {
 	});
 };
 
-var toggleStickerTrade = function toggleStickerTrade(stickerId, tradeStatus) {
-	var dataPack = stickerId + "&" + tradeStatus;
+var toggleStickerTrade = function toggleStickerTrade(stickerId, tradeStatus, price) {
+	var dataPack = stickerId + "&" + tradeStatus + "&" + price;
 
 	sendAjax('GET', '/toggleTrade', dataPack, function (data) {
 		loadStickersFromServer();

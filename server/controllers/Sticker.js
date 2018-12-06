@@ -1,5 +1,8 @@
 const models = require('../models');
 
+// Require the account controlled in order to directly use functions
+const accountController = require('./Account.js');
+
 const Sticker = models.Sticker;
 
 
@@ -170,6 +173,7 @@ const toggleTradeSticker = (request, response) => {
     changedModel.tradable = !(changedModel.tradable);
     const idInfo = docs;
     idInfo.tradable = changedModel.tradable;
+    idInfo.balance = parseInt(reqId[2]);
     // const toggledSticker = new Sticker.StickerModel(changedModel);
     const stickerPromise = idInfo.save();
 
@@ -201,14 +205,25 @@ const changeOwner = (request, response) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occured' });
     }
-    const idInfo = docs;
+    // Create copy of the sticker data to manipulate
+    const sticker = docs;
+    
+    // Change the balance of the buyer and seller
+    //accountController.tradeBalance(sticker.owner, req.session.account._id, sticker.balance)
+    // Just formatting for another function I will add soon.
+    // accountController.addBalance(req.session.account._id, sticker.balance);
+    accountController.checkForDailyBonus(req.session.account._id);
+    
     changedModel = JSON.stringify(docs);
     changedModel = JSON.parse(changedModel);
     changedModel.tradable = !(changedModel.tradable);
-    idInfo.tradable = changedModel.tradable;
-    idInfo.owner = req.session.account._id;
+    
+    // Change the owner and balance
+    sticker.tradable = changedModel.tradable;
+    sticker.owner = req.session.account._id;
+    sticker.balance = 0;
     // const toggledSticker = new Sticker.StickerModel(changedModel);
-    const stickerPromise = idInfo.save();
+    const stickerPromise = sticker.save();
 
     stickerPromise.then(() => res.json({ redirect: '/trade' }));
 

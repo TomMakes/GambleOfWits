@@ -29,6 +29,16 @@ const handleSelectTradeSticker = (e) => {
     const tradeMenu = document.getElementById("stickerTradeMenuDiv");
     tradeMenu.classList.add("hidden");
   
+    // Run a function that takes the sticker ID and price of sticker, 
+    // and updates the Sticker by setting tradable true and price.
+  
+    // make sure I am sending the appropriate values to the function
+    console.log("StickerID " + $("#tradedStickerID").val() + "  And sticker price of " +  $("#stickerPrice").val());
+  
+	
+    // trade the sticker passing in id, what to change trade status to, and the price
+	toggleStickerTrade($("#tradedStickerID").val(), '1', $("#stickerPrice").val());
+    
 	return false;
 };
 
@@ -50,6 +60,13 @@ function handleSelectSticker(id) {
 	
 	return false;
 };
+
+// Stub function which is going to be for removing a sticker from the tradable area.
+// This function makes tradable false, and sets price of sticker to 0.
+function removeFromTradingFloor(sticker){
+  // stickerID, trade status (0 is false), price
+  toggleStickerTrade(sticker._id, '0', '0');
+}
 
 function handleSelectTradeStickerOLD(id, tradeStatus) {
 	event.preventDefault();
@@ -86,6 +103,7 @@ const StickerTradeMenu = (props) => {
 	    	How much do you want to trade {props.sticker.name} for? <span> <br /> <br /> </span>
 	    	<label htmlFor="price">Price: </label>
 	    	<input id="stickerPrice" type="text" name="price" placeholder="Sticker Price"/>
+            <input id="tradedStickerID" type="hidden" name="stickerID" value={props.sticker._id} />
 	    	<input className="tradeStickerSubmit" type="submit" value="Trade Sticker" />
     </form>
   );
@@ -136,8 +154,21 @@ const StickerList = function(props) {
 	  
   const stickerNodes = props.stickers.map(function(sticker) {
 	  let stickerTradeStatus = "False";
-	  if(sticker.tradable) 
-		  stickerTradeStatus = "True";
+	  if(sticker.tradable) {
+        stickerTradeStatus = "True";
+        return(
+		<div key={sticker._id} className="sticker">
+			<img src= {sticker.url} alt="domo Face" className="stickerFace" />
+			<h3 className="stickerName"> Name: {sticker.name} </h3>
+			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
+			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
+			<button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
+			<button className="tradeSticker" onClick={() => removeFromTradingFloor(sticker)}> Take off Trading Floor </button>
+            
+		</div>
+	    ); 
+      }
+		
 	return(
 		<div key={sticker._id} className="sticker">
 			<img src= {sticker.url} alt="domo Face" className="stickerFace" />
@@ -172,8 +203,8 @@ const loadStickerFromServer = (stickerId) => {
 	});
 };
 
-const toggleStickerTrade = (stickerId, tradeStatus) => {
-	let dataPack = stickerId + "&" + tradeStatus;
+const toggleStickerTrade = (stickerId, tradeStatus, price) => {
+	let dataPack = stickerId + "&" + tradeStatus + "&" + price;
 
 	sendAjax('GET', '/toggleTrade', dataPack, (data) => {
 		loadStickersFromServer();

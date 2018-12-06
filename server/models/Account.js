@@ -38,6 +38,10 @@ const AccountSchema = new mongoose.Schema({
     min: 0,
 	default: 1,
   },
+  lastLoginBonus: {
+    type: Date,
+    default: Date.now,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
