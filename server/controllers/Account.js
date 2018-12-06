@@ -99,58 +99,6 @@ const testFunction = (string) => {
   return (string);
 };
 
-// Makes it so the user gets a bonus of credits for logging in a day after last daily given.
-const checkForDailyBonus = (userId) => {
-  Account.AccountModel.findById(userId, (err, doc) => {
-    if (err) {
-      console.log(err);
-      return ('error: An error occured ');
-    }
-    let userInfo = doc;
-    
-    // Get the current date
-    const currentTime = new Date();
-    
-    // check the date of last daily with the date of current time
-    console.dir(userInfo.lastLoginBonus);
-    console.dir((userInfo.lastLoginBonus).getDate());
-    console.dir(currentTime.getDate());
-    
-    // compare if the months are different from each other
-    if (currentTime.getDate() == (userInfo.lastLoginBonus).getDate()) {
-      console.log("Months match");
-      // compare of the days are different from each other
-      if (currentTime.getDay() == (userInfo.lastLoginBonus).getDay()) {
-        // return 0 for no daily given if they are the same
-        console.log("Days Match");
-        return 0;
-      }
-      else {
-        // Set the last given login bonus to today
-        userInfo.lastLoginBonus = currentTime;
-        
-        //  Give the user their login bonus
-        addBalance(userId, 100);
-        
-        //Return 1 for successful daily bonus given
-        return 1;
-      }
-    }
-    else {
-      // Set the last given login bonus to today
-      userInfo.lastLoginBonus = currentTime;
-      
-      //  Give the user their login bonus
-      addBalance(userId, 100);
-      
-      //Return 1 for successful daily bonus given
-      return 1;
-    }
-    //In the case that nothing at all gets done
-    console.log("Error in checking date");
-    return(0);
-  });
-};
 
 // Changes the balances of two accounts due to a trade
 // TraderId is the person trying to trade away sticker
@@ -241,6 +189,59 @@ const addBalance = (userId, funds) => {
         return ('error: Error occured ');
       });
       return('Transaction Complete!');
+  });
+};
+
+// Makes it so the user gets a bonus of credits for logging in a day after last daily given.
+const checkForDailyBonus = (userId) => {
+  Account.AccountModel.findById(userId, (err, doc) => {
+    if (err) {
+      console.log(err);
+      return ('error: An error occured ');
+    }
+    let userInfo = doc;
+    
+    // Get the current date
+    const currentTime = new Date();
+    
+    // check the date of last daily with the date of current time
+    console.dir(userInfo.lastLoginBonus);
+    console.dir((userInfo.lastLoginBonus).getDate());
+    console.dir(currentTime.getDate());
+    
+    // compare if the months are different from each other
+    if (currentTime.getDate() === (userInfo.lastLoginBonus).getDate()) {
+      console.log("Months match");
+      // compare of the days are different from each other
+      if (currentTime.getDay() === (userInfo.lastLoginBonus).getDay()) {
+        // return 0 for no daily given if they are the same
+        console.log("Days Match");
+        return 0;
+      }
+      else {
+        // Set the last given login bonus to today
+        userInfo.lastLoginBonus = currentTime;
+        
+        //  Give the user their login bonus
+        addBalance(userId, 100);
+        
+        //Return 1 for successful daily bonus given
+        return 1;
+      }
+    }
+    else {
+      // Set the last given login bonus to today
+      userInfo.lastLoginBonus = currentTime;
+      
+      //  Give the user their login bonus
+      addBalance(userId, 100);
+      
+      //Return 1 for successful daily bonus given
+      return 1;
+    }
+    //In the case that nothing at all gets done
+    console.log("Error in checking date");
+    return(0);
   });
 };
 
