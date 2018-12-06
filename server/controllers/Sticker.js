@@ -173,7 +173,7 @@ const toggleTradeSticker = (request, response) => {
     changedModel.tradable = !(changedModel.tradable);
     const idInfo = docs;
     idInfo.tradable = changedModel.tradable;
-    idInfo.balance = parseInt(reqId[2]);
+    idInfo.balance = parseInt(reqId[2], 10);
     // const toggledSticker = new Sticker.StickerModel(changedModel);
     const stickerPromise = idInfo.save();
 

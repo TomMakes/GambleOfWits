@@ -113,7 +113,6 @@ const tradeBalance = (traderId, newOwnerId, change) => {
       return ('error: An error occured ');
     }
     ownerInfo = doc;
-    let ownerInfoString = JSON.stringify(doc);
     
     Account.AccountModel.findById(traderId, (err2, doc2) => {
       if (err2) {
@@ -124,7 +123,7 @@ const tradeBalance = (traderId, newOwnerId, change) => {
       
       // Change the balances to complete transaction
       // Change only if the person taking the sticker isn't the original owner
-      if (traderInfo._id != ownerInfo._id) {
+      if (traderInfo._id !== ownerInfo._id) {
         traderInfo.balance += change;
         ownerInfo.balance -= change;
       }
@@ -158,9 +157,11 @@ const tradeBalance = (traderId, newOwnerId, change) => {
         return ('error: Error occured ');
       });
       
-      return('Transaction Complete!');
+      return(true);
     });
+    return(true);
   });
+  return(true);
 };
 
 // Adds x funds to a single account
@@ -185,10 +186,10 @@ const addBalance = (userId, funds) => {
         if (err4.code === 11000) {
           return ('error: Account already exists occured ');
         }
-    
+
         return ('error: Error occured ');
       });
-      return('Transaction Complete!');
+    return ('Transaction Complete!');
   });
 };
 
@@ -232,16 +233,13 @@ const checkForDailyBonus = (userId) => {
     else {
       // Set the last given login bonus to today
       userInfo.lastLoginBonus = currentTime;
-      
+
       //  Give the user their login bonus
       addBalance(userId, 100);
-      
-      //Return 1 for successful daily bonus given
+
+      // Return 1 for successful daily bonus given
       return 1;
     }
-    //In the case that nothing at all gets done
-    console.log("Error in checking date");
-    return(0);
   });
 };
 
