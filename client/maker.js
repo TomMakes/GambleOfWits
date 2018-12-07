@@ -197,6 +197,18 @@ const loadStickersFromServer = () => {
 	});
 };
 
+const checkForDaily = () => {
+	sendAjax('GET', '/checkForDailyBonus', null, (data) => {
+        console.log("Checked for Daily");
+		console.dir(data);
+        if (data.status === true) {
+          // Alert the user they have gotten a daily bonus
+          const dailyMessage = document.getElementById("dailyMessage");
+          dailyMessage.classList.remove("hidden");
+        }
+	});
+};
+
 const loadStickerFromServer = (stickerId) => {
 	sendAjax('GET', '/getSticker', stickerId, (data) => {
 		console.dir(data);
@@ -229,8 +241,13 @@ const setup = function(csrf) {
 	ReactDOM.render(
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 
 	);
-	
+	// Load the username and balance user is currently at
 	getUserBalance();
+
+    // Check if user has gotten a daily bonus for logging in
+    checkForDaily();
+  
+    // Load the current stickers that the user has
 	loadStickersFromServer();
 };
 

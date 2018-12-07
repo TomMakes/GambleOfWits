@@ -12,6 +12,7 @@ const router = (app) => {
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
+  app.get('/checkForDailyBonus', mid.requiresLogin, controllers.Account.checkForDailyBonus);
   app.get('/getUserInfo', mid.requiresLogin, controllers.Account.getUserInfo);
   app.get('/gamble', mid.requiresLogin, controllers.Sticker.gamblePage);
   app.get('/maker', mid.requiresLogin, controllers.Sticker.makerPage);
@@ -20,6 +21,7 @@ const router = (app) => {
   app.get('/trade', mid.requiresLogin, controllers.Trade.tradePage);
   app.get('/upgrade', mid.requiresLogin, controllers.Sticker.upgradePage);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/*', controllers.Account.invalidPage);
 };
 
 module.exports = router;

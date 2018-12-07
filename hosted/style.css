@@ -33,6 +33,7 @@ nav:nth-child(1) {
 .navlink {
     padding: 5px;
     padding-right: 15px;
+    padding-top: 10px;
     margin-top: 5px;
     margin-right: 5px;
     color: white;
@@ -82,6 +83,7 @@ nav:nth-child(1) {
 
 .Button {	
     padding: 5px;
+    padding-top: 10px;
     padding-right: 15px;
     margin-top: 5px;
     margin-right: 5px;
@@ -107,6 +109,22 @@ nav:nth-child(1) {
 .Button a:hover {
     transition: background-color 0.8s ease;
     background-color: #efc2bf;
+}
+
+#invalidButton {
+    margin:auto;
+	width: 50%;
+    
+    text-align: center;
+    font-size: 1.4em;
+}
+#invalidButton a{
+    margin:auto;
+	width: 50%;
+    padding-left: 8em;
+    padding-right: 8em;
+    text-align: center;
+    font-size: 1.4em;
 }
 
 .stickerForm {
@@ -257,6 +275,24 @@ nav:nth-child(1) {
 
     margin: 0 auto;
     margin-top: 100px;
+}
+
+#dailyMessage {
+    width: 50%;
+    min-width: 150px;
+    
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 10px;
+  
+    border: 2px solid #878b91;
+	border-top-style: none;
+	border-left-style: none;
+    background-color: #d6b951;
+    border-radius: 15px;
+   
 }
 
 .sticker {

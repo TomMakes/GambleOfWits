@@ -6,6 +6,10 @@ const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
+const invalidPage = (req, res) => {
+  res.render('invalid', { csrfToken: req.csrfToken() });
+};
+
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -93,10 +97,6 @@ const getUserInfo = (request, response) => {
     idInfo.salt = undefined;
     return res.json({ account: idInfo });
   });
-};
-
-const testFunction = (string) => {
-  return (string);
 };
 
 
@@ -194,11 +194,14 @@ const addBalance = (userId, funds) => {
 };
 
 // Makes it so the user gets a bonus of credits for logging in a day after last daily given.
-const checkForDailyBonus = (userId) => {
+const checkForDailyBonus = (request, response) => {
+  const req = request;
+  const res = response;
+  const userId = req.session.account._id;
   Account.AccountModel.findById(userId, (err, doc) => {
     if (err) {
       console.log(err);
-      return ('error: An error occured ');
+      return res.status(400).json({ error: 'An error occured' });
     }
     let userInfo = doc;
     
@@ -217,17 +220,30 @@ const checkForDailyBonus = (userId) => {
       if (currentTime.getDay() === (userInfo.lastLoginBonus).getDay()) {
         // return 0 for no daily given if they are the same
         console.log("Days Match");
-        return 0;
+        // compare years
+        if (currentTime.getFullYear() === (userInfo.lastLoginBonus).getFullYear()) {
+         res.json({ status: false }); 
+        }
+        else{
+          // Set the last given login bonus to today
+          userInfo.lastLoginBonus = currentTime;
+  
+          //  Give the user their login bonus
+          addBalance(userId, 100);
+  
+          //Return 1 for successful daily bonus given
+          res.json({ status: true });
+        }
       }
       else {
         // Set the last given login bonus to today
         userInfo.lastLoginBonus = currentTime;
-        
+
         //  Give the user their login bonus
         addBalance(userId, 100);
-        
+
         //Return 1 for successful daily bonus given
-        return 1;
+        res.json({ status: true });
       }
     }
     else {
@@ -238,7 +254,7 @@ const checkForDailyBonus = (userId) => {
       addBalance(userId, 100);
 
       // Return 1 for successful daily bonus given
-      return 1;
+      res.json({ status: true });
     }
   });
 };
@@ -255,6 +271,7 @@ const getToken = (request, response) => {
 };
 
 module.exports.loginPage = loginPage;
+module.exports.invalidPage = invalidPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
@@ -262,5 +279,4 @@ module.exports.checkForDailyBonus = checkForDailyBonus;
 module.exports.getUserInfo = getUserInfo;
 module.exports.tradeBalance = tradeBalance;
 module.exports.addBalance = addBalance;
-module.exports.testFunction = testFunction;
 module.exports.getToken = getToken;
