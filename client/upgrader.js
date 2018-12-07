@@ -141,7 +141,7 @@ const AccountInfo = (props) => {
 			<button className="generateStickers" onClick={() => grabNewStickers()}> Open Free Sticker Pack! </button>
 	</div>
 	);
-}
+};
 
 
 const StickerList = function(props) {
@@ -233,14 +233,43 @@ var getUserBalance = function getUserBalance() {
 	});
 };
 
+function grabNewStickers(pack) {
+    let dataPack = pack;
+	sendAjax('GET', '/generateStickers', dataPack, (data) => {
+		ReactDOM.render(
+			<StickerList stickers={data.stickers} />, document.querySelector("#stickers")
+		);
+			loadStickersFromServer();
+			console.log(data);
+	});
+}
+
+const loadCurrencyChoices() {
+  ReactDOM.render(
+			<PremiumButtons buttons={} />, document.querySelector("#premiumButtons")
+  );
+};
+
+const PremiumButtons = (props) => {
+	console.log("Sending props info");
+	console.dir(props);
+	return (
+	<div>
+      <div class="button" id="makerUpgradeButton" onClick={() => grabNewStickers('firstPack')}><a  href="/maker">Purchase Beginner Pack!</a></div>
+      <div class="button" id="makerUpgradeButton"><a onClick={() => grabNewStickers('animalPack')} href="/maker">Purchase Animal Pack!</a></div>
+		<h3> Username: {props.account.account.username} <span> <br /> </span>
+			 Credits: {props.account.account.balance}</h3>
+			<button className="generateStickers" onClick={() => grabNewStickers('animalPack')}> Open Free Sticker Pack! </button>
+	</div>
+	);
+};
+
+
 const setup = function(csrf) {
   
-    // Check if user has gotten a daily bonus for logging in
-    checkForDaily();
+    // Load the Premium button payments 
+    loadCurrencyChoices();
 	
-	/*ReactDOM.render(
-		<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
-	);*/
 	
 	ReactDOM.render(
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 

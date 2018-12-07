@@ -105,21 +105,50 @@ const getSticker = (request, response) => {
 };
 
 const generateStickers = (req, res) => {
+  // parsing URL to obtain the string
+  // Get rid of the URL and isolate variables
+  let reqId = req.url.split('?');
+  console.log(req.url);
+  // Take only the first variable as it's the pack name
+  reqId = reqId[1].split('&');
+  
+  // Run the set algorithms for each card pack
   const pickedSet = Math.floor(Math.random() * (5 - 0) + 0);
 
   // Create a number of possible sticker packs the user can recieve
   const sets = [[1, 2, 3, 4, 9], [2, 4, 6, 8, 10],
 				[1, 3, 5, 7, 9], [3, 5, 6, 7, 8], [2, 3, 4, 8, 10]];
+  let names;
+  let rarities;
+  let url;
+  console.dir(reqId);
+  // If it is the firstPack
+  if (reqId[0] === 'firstPack') {
+    console.log("First pack is picked");
+    // Make array of the names and rarities of possible stickers.
+    names = ['Mailbox', 'Tire', 'Teacup', 'Car', 'Plane', 'Coffee',
+      'Domo', 'Clippy', 'Dragon', 'Horse'];
+    rarities = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
+  
+    url = ['mailbox.png', 'tyre.png', 'Teacup.png',
+      'electric-car.png', 'DdOo-Paper-plane.png',
+      'coffe.png', 'domofaceNo.jpeg', 'clippy.png',
+      'GlitchSimplifiedCuteDragon.png', 'blackhorse.png'];
+  }
 
-	// Make array of the names and rarities of possible stickers.
-  const names = ['Mailbox', 'Tire', 'Teacup', 'Car', 'Plane', 'Coffee',
-    'Domo', 'Clippy', 'Dragon', 'Horse'];
-  const rarities = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
+  // If it is the animal pack
+  if (reqId[0] === 'animalPack') {
+    // Make array of the names and rarities of possible stickers.
+    names = ['Water Turtle', 'Bunbun', 'Toy Bear', 'Gerald', 'Angry Dog', 'Christmas Bear',
+      'Ascended Cat', 'Evil Cat', 'Bunny', 'Cute Turtle'];
+    rarities = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
+  
+    url = ['animalPack/Anonymous-turtle.png', 'animalPack/pitr-bunny-icon.png', 'animalPack/toy-bear.png',
+      'animalPack/Gerald-Dog.png', 'animalPack/angry-dog.png',
+      'animalPack/Christmas-Bear.png', 'animalPack/winke-winke.png', 'animalPack/cat-smile.png',
+      'animalPack/Bunny.png', 'animalPack/turtle.png'];
+  }
 
-  const url = ['mailbox.png', 'tyre.png', 'Teacup.png',
-    'electric-car.png', 'DdOo-Paper-plane.png',
-    'coffe.png', 'domofaceNo.jpeg', 'clippy.png',
-    'GlitchSimplifiedCuteDragon.png', 'blackhorse.png'];
 
 	// Grab the specific array
   const choice = sets[pickedSet];

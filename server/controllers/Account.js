@@ -210,8 +210,8 @@ const checkForDailyBonus = (request, response) => {
     
     // check the date of last daily with the date of current time
     console.dir(userInfo.lastLoginBonus);
-    console.dir((userInfo.lastLoginBonus).getDate());
-    console.dir(currentTime.getDate());
+    console.dir((userInfo.lastLoginBonus));
+    console.dir(currentTime);
     
     // compare if the months are different from each other
     if (currentTime.getDate() === (userInfo.lastLoginBonus).getDate()) {
@@ -222,41 +222,22 @@ const checkForDailyBonus = (request, response) => {
         console.log("Days Match");
         // compare years
         if (currentTime.getFullYear() === (userInfo.lastLoginBonus).getFullYear()) {
-         res.json({ status: false }); 
-        }
-        else{
-          // Set the last given login bonus to today
-          userInfo.lastLoginBonus = currentTime;
-  
-          //  Give the user their login bonus
-          addBalance(userId, 100);
-  
-          //Return 1 for successful daily bonus given
-          res.json({ status: true });
+          if (currentTime.getSeconds() === (userInfo.lastLoginBonus).getSeconds()) {
+            console.log("Seconds match");
+            console.log(currentTime.getSeconds());
+            console.log((userInfo.lastLoginBonus).getSeconds());
+            return res.json({ status: false }); 
+          }
         }
       }
-      else {
-        // Set the last given login bonus to today
-        userInfo.lastLoginBonus = currentTime;
-
-        //  Give the user their login bonus
-        addBalance(userId, 100);
-
-        //Return 1 for successful daily bonus given
-        res.json({ status: true });
-      }
     }
-    else {
-      // Set the last given login bonus to today
-      userInfo.lastLoginBonus = currentTime;
-
-      //  Give the user their login bonus
-      addBalance(userId, 100);
-
-      // Return 1 for successful daily bonus given
-      res.json({ status: true });
-    }
-  res.json({ status: true });
+   // Set the last given login bonus to today
+   userInfo.lastLoginBonus = currentTime;
+   //  Give the user their login bonus
+   addBalance(userId, 100);
+   // Return 1 for successful daily bonus given  
+  
+   return res.json({ status: true });
   });
 };
 

@@ -44,7 +44,8 @@ var handleSelectTradeSticker = function handleSelectTradeSticker(e) {
 };
 
 function grabNewStickers() {
-	sendAjax('GET', '/generateStickers', null, function (data) {
+	var dataPack = 'animalPack';
+	sendAjax('GET', '/generateStickers', dataPack, function (data) {
 		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
 		loadStickersFromServer();
 		console.log(data);
@@ -167,7 +168,7 @@ var AccountInfo = function AccountInfo(props) {
 			{ className: "generateStickers", onClick: function onClick() {
 					return grabNewStickers();
 				} },
-			" Open Sticker Pack! "
+			" Open Free Sticker Pack! "
 		)
 	);
 };

@@ -389,11 +389,16 @@ h3.stickersTradable {
 	background-color: #e8eef7;
 	border: 2px solid #878b91;
 	padding: 5px;
+    padding-left: 15px;
 	margin-top: 30px;
 	padding-bottom: 10px;
 	border-radius: 15px;
 	border-bottom-right-radius: 15px;
     border-top-right-radius: 15px;
+}
+
+.Text p{
+  font-size: 1.2em;
 }
 
 #stickerTradeMenuDiv {
