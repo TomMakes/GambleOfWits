@@ -256,6 +256,7 @@ const checkForDailyBonus = (request, response) => {
       // Return 1 for successful daily bonus given
       res.json({ status: true });
     }
+  res.json({ status: true });
   });
 };
 
