@@ -401,6 +401,31 @@ h3.stickersTradable {
   font-size: 1.2em;
 }
 
+#firstPackButton {
+  float: left;
+  margin-left: 10%;
+}
+
+#animalPackButton {
+  float: left;
+  margin-left: 53%;
+}
+
+#firstPackNote {
+  float: left;
+  margin-left: 80px;
+  font-size: 1.3em;
+  color: rgb(0, 9, 22, 0.0);
+  transition: color 1s;
+}
+
+#animalPackNote {
+  margin-left: 320px;
+  font-size: 1.3em;
+  color: rgb(0, 9, 22, 0.0);
+  transition: color 1s;
+}
+
 #stickerTradeMenuDiv {
     position: fixed;
     margin:auto;
@@ -421,6 +446,10 @@ h3.stickersTradable {
   margin-top: 25%;
   text-align: center;
   font-size: 1.2em;
+}
+
+.green {
+  color: #4bea9f;
 }
 
 

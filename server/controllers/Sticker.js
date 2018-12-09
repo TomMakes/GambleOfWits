@@ -139,11 +139,13 @@ const generateStickers = (req, res) => {
   // If it is the animal pack
   if (reqId[0] === 'animalPack') {
     // Make array of the names and rarities of possible stickers.
-    names = ['Water Turtle', 'Bunbun', 'Toy Bear', 'Gerald', 'Angry Dog', 'Christmas Bear',
+    names = ['Water Turtle', 'Bunbun', 'Toy Bear',
+             'Gerald', 'Angry Dog', 'Christmas Bear',
       'Ascended Cat', 'Evil Cat', 'Bunny', 'Cute Turtle'];
     rarities = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
-  
-    url = ['animalPack/Anonymous-turtle.png', 'animalPack/pitr-bunny-icon.png', 'animalPack/toy-bear.png',
+
+    url = ['animalPack/Anonymous-turtle.png',
+      'animalPack/pitr-bunny-icon.png', 'animalPack/toy-bear.png',
       'animalPack/Gerald-Dog.png', 'animalPack/angry-dog.png',
       'animalPack/Christmas-Bear.png', 'animalPack/winke-winke.png', 'animalPack/cat-smile.png',
       'animalPack/Bunny.png', 'animalPack/turtle.png'];

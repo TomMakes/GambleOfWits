@@ -43,7 +43,7 @@ const handleSelectTradeSticker = (e) => {
 };
 
 function grabNewStickers() {
-    let dataPack = 'animalPack';
+    let dataPack = 'firstPack';
 	sendAjax('GET', '/generateStickers', dataPack, (data) => {
 		ReactDOM.render(
 			<StickerList stickers={data.stickers} />, document.querySelector("#stickers")
@@ -141,7 +141,7 @@ const AccountInfo = (props) => {
 			<button className="generateStickers" onClick={() => grabNewStickers()}> Open Free Sticker Pack! </button>
 	</div>
 	);
-}
+};
 
 
 const StickerList = function(props) {

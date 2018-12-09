@@ -80,7 +80,7 @@ StickerSchema.statics.findByTradable = (tradableVal, callback) => {
     tradable: tradableVal,
   };
 
-  return StickerModel.find(search).select('name rarity tradable balance url').exec(callback);
+  return StickerModel.find(search).select('name rarity tradable balance owner url').exec(callback);
 };
 
 

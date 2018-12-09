@@ -13,6 +13,7 @@ const router = (app) => {
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/checkForDailyBonus', mid.requiresLogin, controllers.Account.checkForDailyBonus);
+  app.get('/subtractBalance', mid.requiresLogin, controllers.Account.subtractBalance);
   app.get('/getUserInfo', mid.requiresLogin, controllers.Account.getUserInfo);
   app.get('/gamble', mid.requiresLogin, controllers.Sticker.gamblePage);
   app.get('/maker', mid.requiresLogin, controllers.Sticker.makerPage);

@@ -8,6 +8,7 @@ const loginPage = (req, res) => {
 
 const invalidPage = (req, res) => {
   res.render('invalid', { csrfToken: req.csrfToken() });
+  return res.status(404).json({ error: 'Page not found' });
 };
 
 
@@ -165,14 +166,24 @@ const tradeBalance = (traderId, newOwnerId, change) => {
 };
 
 // Adds x funds to a single account
-const addBalance = (userId, funds) => {
+const addBalance = (userId, funds, res) => {
   Account.AccountModel.findById(userId, (err, doc) => {
       if (err) {
         console.log(err);
         return ('error: An error occured ');
       }
       let userInfo = doc;
-
+      
+      // Make sure the balance does not go negative with the trasaction
+      // If it does, cancel transaction
+      // 
+      if ((userInfo.balance + funds) < 0 ) {
+        if(res !== undefined){
+          return res.status(400).json({ 
+            success: false,
+            error: 'Not Enough funds' });
+          } 
+      }
       // Change the balances to complete transaction
       userInfo.balance += funds;
     
@@ -180,6 +191,10 @@ const addBalance = (userId, funds) => {
       const userAccount = new Account.AccountModel(userInfo);
     
       const userPromise = userAccount.save();
+    
+      if(res !== undefined){
+        userPromise.then(() => res.json({ redirect: '/upgrade' }));
+      }
       
       userPromise.catch((err4) => {
         console.log(err4);
@@ -193,6 +208,19 @@ const addBalance = (userId, funds) => {
   });
 };
 
+//Used to interact with the Client for addBalance
+const subtractBalance = (req, res) => {
+  //  parsing URL to obtain the string
+  //  Get rid of the URL and isolate variables
+  let reqId = req.url.split('?');
+  //  Take only the first variable as it's the balanceChange
+  reqId = reqId[1].split('&');
+  console.dir(reqId);
+
+  // Send a request to change it, send a negative value so that it subtracts from user balance.
+  addBalance(req.session.account._id, (-1 * reqId[0]), res);
+};
+  
 // Makes it so the user gets a bonus of credits for logging in a day after last daily given.
 const checkForDailyBonus = (request, response) => {
   const req = request;
@@ -222,12 +250,14 @@ const checkForDailyBonus = (request, response) => {
         console.log("Days Match");
         // compare years
         if (currentTime.getFullYear() === (userInfo.lastLoginBonus).getFullYear()) {
-          if (currentTime.getSeconds() === (userInfo.lastLoginBonus).getSeconds()) {
+          return res.json({ status: false }); 
+          // This if block is only used for daily testing
+          /*if (currentTime.getSeconds() === (userInfo.lastLoginBonus).getSeconds()) {
             console.log("Seconds match");
             console.log(currentTime.getSeconds());
             console.log((userInfo.lastLoginBonus).getSeconds());
             return res.json({ status: false }); 
-          }
+          } */
         }
       }
     }
@@ -257,6 +287,7 @@ module.exports.invalidPage = invalidPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.subtractBalance = subtractBalance;
 module.exports.checkForDailyBonus = checkForDailyBonus;
 module.exports.getUserInfo = getUserInfo;
 module.exports.tradeBalance = tradeBalance;

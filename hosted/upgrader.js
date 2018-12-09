@@ -44,7 +44,7 @@ var handleSelectTradeSticker = function handleSelectTradeSticker(e) {
 };
 
 function grabNewStickers() {
-	var dataPack = 'firstPack';
+	var dataPack = 'animalPack';
 	sendAjax('GET', '/generateStickers', dataPack, function (data) {
 		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
 		loadStickersFromServer();
@@ -162,13 +162,6 @@ var AccountInfo = function AccountInfo(props) {
 			),
 			"Credits: ",
 			props.account.account.balance
-		),
-		React.createElement(
-			"button",
-			{ className: "generateStickers", onClick: function onClick() {
-					return grabNewStickers();
-				} },
-			" Open Free Sticker Pack! "
 		)
 	);
 };
@@ -320,21 +313,91 @@ var getUserBalance = function getUserBalance() {
 	});
 };
 
+// Change the balance of the user
+function changeBalance(pack, stickerBuy) {
+	// Prevent it from changing the page to /maker
+	event.preventDefault();
+	// Send information of how much currency to add or take away
+	var dataPack = pack;
+	sendAjax('GET', '/subtractBalance', dataPack, function (data) {
+		if (data.success == false) {
+			return false;
+		}
+		if (stickerBuy === undefined) {
+			getUserBalance();
+			return true;
+		}
+		sendAjax('GET', '/generateStickers', stickerBuy, function (data) {
+			//Once finished, take away 200 credits from user and reload Account info to reflect change
+			document.getElementById(stickerBuy + "Note").style.color = "rgb(0, 9, 22, 1)";
+			console.dir(document.getElementById(stickerBuy + "Note"));
+			getUserBalance();
+			return true;
+		});
+	});
+}
+
+//Purchase a sticker pack for 200 credits
+function buyStickerPack(pack) {
+	// Prevent it from changing the page to /maker
+	event.preventDefault();
+	// Send information of what you're buying to obtain the pack
+	var dataPack = pack;
+	// Make the payment to obtain stickers 
+	changeBalance('200', dataPack);
+}
+
+function loadCurrencyChoices() {
+	console.log("loading currency");
+	ReactDOM.render(React.createElement(PremiumButtons, null), document.querySelector("#premiumButtons"));
+};
+
+var PremiumButtons = function PremiumButtons(props) {
+	console.log("Sending props info");
+	console.dir(props);
+	// WORKING ON MAKING THESE BUTTONS WORK!! HOPING FORMATTING IS A OK
+	return React.createElement(
+		"div",
+		null,
+		React.createElement(
+			"div",
+			{ "class": "button", id: "makerUpgradeButton" },
+			React.createElement(
+				"a",
+				{ onClick: "buyStickerPack('firstPack')",
+					href: "/maker" },
+				"Purchase Beginner Pack!"
+			)
+		),
+		React.createElement(
+			"div",
+			{ "class": "button", id: "makerUpgradeButton" },
+			React.createElement(
+				"a",
+				{
+					onClick: function onClick() {
+						return buyStickerPack('animalPack');
+					}, href: "/maker" },
+				"Purchase Animal Pack!"
+			)
+		)
+	);
+};
+
 var setup = function setup(csrf) {
 
-	// Check if user has gotten a daily bonus for logging in
-	checkForDaily();
+	// Load the Premium button payments 
+	//loadCurrencyChoices();
 
-	/*ReactDOM.render(
- 	<StickerForm csrf={csrf} />, document.querySelector("#makeSticker")
- );*/
 
-	ReactDOM.render(React.createElement(StickerList, { stickers: [] }), document.querySelector("#stickers"));
+	/* ReactDOM.render(
+ 	<StickerList stickers={[]} />, document.querySelector("#stickers") 
+ ); */
 	// Load the username and balance user is currently at
 	getUserBalance();
 
 	// Load the current stickers that the user has
-	loadStickersFromServer();
+	//loadStickersFromServer();
 };
 
 var getToken = function getToken() {

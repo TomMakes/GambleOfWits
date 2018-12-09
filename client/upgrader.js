@@ -138,7 +138,6 @@ const AccountInfo = (props) => {
 	<div>
 		<h3> Username: {props.account.account.username} <span> <br /> </span>
 			 Credits: {props.account.account.balance}</h3>
-			<button className="generateStickers" onClick={() => grabNewStickers()}> Open Free Sticker Pack! </button>
 	</div>
 	);
 };
@@ -233,33 +232,57 @@ var getUserBalance = function getUserBalance() {
 	});
 };
 
-function grabNewStickers(pack) {
-    let dataPack = pack;
-	sendAjax('GET', '/generateStickers', dataPack, (data) => {
-		ReactDOM.render(
-			<StickerList stickers={data.stickers} />, document.querySelector("#stickers")
-		);
-			loadStickersFromServer();
-			console.log(data);
-	});
+// Change the balance of the user
+function changeBalance(pack, stickerBuy) {
+  // Prevent it from changing the page to /maker
+  event.preventDefault();
+  // Send information of how much currency to add or take away
+  let dataPack = pack;
+  sendAjax('GET', '/subtractBalance', dataPack, (data) => {
+    if(data.success == false){
+      return false;
+    }
+    if(stickerBuy === undefined){
+      getUserBalance();
+      return true;
+    }
+    sendAjax('GET', '/generateStickers', stickerBuy, (data) => {
+		  //Once finished, take away 200 credits from user and reload Account info to reflect change
+          document.getElementById(stickerBuy+"Note").style.color = "rgb(0, 9, 22, 1)";
+          console.dir(document.getElementById(stickerBuy+"Note"));
+          getUserBalance();
+          return true;
+	 });
+  });
 }
 
-const loadCurrencyChoices() {
+//Purchase a sticker pack for 200 credits
+function buyStickerPack(pack) {
+    // Prevent it from changing the page to /maker
+    event.preventDefault();
+    // Send information of what you're buying to obtain the pack
+    let dataPack = pack;
+    // Make the payment to obtain stickers 
+    changeBalance('200', dataPack);
+}
+
+function loadCurrencyChoices() {
+  console.log("loading currency");
   ReactDOM.render(
-			<PremiumButtons buttons={} />, document.querySelector("#premiumButtons")
+			<PremiumButtons />, document.querySelector("#premiumButtons")
   );
 };
 
 const PremiumButtons = (props) => {
 	console.log("Sending props info");
 	console.dir(props);
+        // WORKING ON MAKING THESE BUTTONS WORK!! HOPING FORMATTING IS A OK
 	return (
 	<div>
-      <div class="button" id="makerUpgradeButton" onClick={() => grabNewStickers('firstPack')}><a  href="/maker">Purchase Beginner Pack!</a></div>
-      <div class="button" id="makerUpgradeButton"><a onClick={() => grabNewStickers('animalPack')} href="/maker">Purchase Animal Pack!</a></div>
-		<h3> Username: {props.account.account.username} <span> <br /> </span>
-			 Credits: {props.account.account.balance}</h3>
-			<button className="generateStickers" onClick={() => grabNewStickers('animalPack')}> Open Free Sticker Pack! </button>
+      <div class="button" id="makerUpgradeButton"><a  onClick="buyStickerPack('firstPack')"
+                                                     href="/maker">Purchase Beginner Pack!</a></div>
+      <div class="button" id="makerUpgradeButton"><a 
+      onClick={() => buyStickerPack('animalPack')} href="/maker">Purchase Animal Pack!</a></div>
 	</div>
 	);
 };
@@ -268,17 +291,17 @@ const PremiumButtons = (props) => {
 const setup = function(csrf) {
   
     // Load the Premium button payments 
-    loadCurrencyChoices();
+    //loadCurrencyChoices();
 	
 	
-	ReactDOM.render(
+	/* ReactDOM.render(
 		<StickerList stickers={[]} />, document.querySelector("#stickers") 
-	);
+	); */
 	// Load the username and balance user is currently at
 	getUserBalance();
   
     // Load the current stickers that the user has
-	loadStickersFromServer();
+	//loadStickersFromServer();
 };
 
 const getToken = () => {

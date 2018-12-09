@@ -13,20 +13,27 @@
 </head>
 <body>
   <nav>
+    <section class="button" id="makerUpgradeButton"><a  href="/maker">Go Back Home</a></section>
+	 <section class="button" id="makerTradeButton"><a  href="/trade">Go Trade!</a></section>
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
-  <div >
-	  <section class="button" id="makerUpgradeButton"><a  href="/maker">Go Back Home</a></section>
-	  <section class="button" id="makerTradeButton"><a  href="/trade">Go Trade!</a></section>
-  </div>
+
+  
+  <section class="accountInfo">	
+  </section>
   
 	<div class="Text"> 
       <div>
 		<h1> Welcome to the Sticker Store! </h1>
 		<p> Sticker Packs Cost 200 <br> </p>
-      <div class="button" id="makerUpgradeButton"><a  href="/maker">Purchase Beginner Pack!</a></div>
-      <div class="button" id="makerUpgradeButton"><a  href="/maker">Purchase Animal Pack!</a></div>
-      <br> <br><br><br><br><br><br>      
+      <div class="button" id="makerUpgradeButton"><a  onClick="buyStickerPack('firstPack')"
+                                                     href="/maker">Purchase Beginner Pack!</a></div>
+      <div class="button" id="makerUpgradeButton"><a  onClick="buyStickerPack('animalPack')"
+                                                     href="/maker">Purchase Animal Pack!</a></div>
+      <br><br> <br><div id="firstPackNote"> Purchased! </div>
+                    <div id="animalPackNote"> Purchased! </div>
+        
+        <br><br><br><br><br>      
       <div>
        
         <h2> Premium Currency </h2>
@@ -34,10 +41,18 @@
             As this is a prototype, all credit purchases are free</p>
         
         <div id="premiumButtons">
-          
+          <div class="button" id="makerUpgradeButton"><a  onClick="changeBalance('-1000')"
+                                                     href="/maker">Buy 1000 Credits for 
+            <span class="green">$1</span>!</a></div>
+          <div class="button" id="makerUpgradeButton"><a  onClick="changeBalance('-5000')"
+                                                     href="/maker">Buy 5000 Credits for <span class="green">$3</span>! (40% off!)</a></div>
         </div>
+        <br> <br><br><br><br><br><br>  
       </div>
 	</div>
+  </div>
+    <div id="stickerMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <h3><span id="errorMessage">Wrong username or password</span></h3><img id="sticker" src="assets/img/Clippy.png" alt="sticker"/>
   </div>
 	<script src="/assets/helper.js"></script>
     <script src="/assets/upgrader.js"></script>
