@@ -277,15 +277,15 @@ const checkForDailyBonus = (request, response) => {
       return res.json({ status: true });
     });
 
-    userPromise.catch((err) => {
-          console.log(err);
-          if (err.code === 11000) {
+    userPromise.catch((err2) => {
+          console.log(err2);
+          if (err2.code === 11000) {
             return ('error: Account already exists occured ');
           }
     
           return ('error: Error occured ');
     });
-    
+    return ("Complete");
   });
 };
 
