@@ -240,11 +240,8 @@ const changeOwner = (request, response) => {
     const sticker = docs;
     
     // Change the balance of the buyer and seller
-    //accountController.tradeBalance(sticker.owner, req.session.account._id, sticker.balance)
-    // Just formatting for another function I will add soon.
-    // accountController.addBalance(req.session.account._id, sticker.balance);
-    accountController.checkForDailyBonus(req.session.account._id);
-    
+    accountController.tradeBalance(sticker.owner, req.session.account._id, sticker.balance);
+
     changedModel = JSON.stringify(docs);
     changedModel = JSON.parse(changedModel);
     changedModel.tradable = !(changedModel.tradable);

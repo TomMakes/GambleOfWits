@@ -341,12 +341,22 @@ h3.emptySticker {
     margin-top: 18px;
 }
 
+stickerBase {
+  float:right;
+  min-height: 50px;
+}
+
+stickerOther {
+  float:left;
+  height: 50px;
+}
+
 h3.stickerName {
     float:left;
     width: 200px;
     font-weight: bold;
     padding-left: 65px;
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 
 h3.stickersRarity {

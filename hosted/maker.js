@@ -44,6 +44,7 @@ var handleSelectTradeSticker = function handleSelectTradeSticker(e) {
 };
 
 function grabNewStickers() {
+	event.preventDefault();
 	var dataPack = 'firstPack';
 	sendAjax('GET', '/generateStickers', dataPack, function (data) {
 		ReactDOM.render(React.createElement(StickerList, { stickers: data.stickers }), document.querySelector("#stickers"));
@@ -164,11 +165,25 @@ var AccountInfo = function AccountInfo(props) {
 			props.account.account.balance
 		),
 		React.createElement(
-			"button",
-			{ className: "generateStickers", onClick: function onClick() {
-					return grabNewStickers();
-				} },
-			" Open Free Sticker Pack! "
+			"section",
+			{ className: "button", id: "makerUpgradeButton" },
+			React.createElement(
+				"a",
+				{ onClick: function onClick() {
+						return grabNewStickers();
+					},
+					href: "/upgrade" },
+				"Open Free Sticker Pack!"
+			)
+		),
+		React.createElement(
+			"span",
+			null,
+			" ",
+			React.createElement("br", null),
+			" ",
+			React.createElement("br", null),
+			"  "
 		)
 	);
 };
@@ -193,41 +208,50 @@ var StickerList = function StickerList(props) {
 			return React.createElement(
 				"div",
 				{ key: sticker._id, className: "sticker" },
-				React.createElement("img", { src: sticker.url, alt: "domo Face", className: "stickerFace" }),
 				React.createElement(
-					"h3",
-					{ className: "stickerName" },
-					" Name: ",
-					sticker.name,
-					" "
+					"div",
+					{ className: "stickerBase" },
+					React.createElement("img", { src: sticker.url, alt: "domo Face", className: "stickerFace" }),
+					React.createElement(
+						"h3",
+						{ className: "stickerName" },
+						" Name: ",
+						React.createElement(
+							"span",
+							null,
+							" ",
+							React.createElement("br", null),
+							" "
+						),
+						" ",
+						sticker.name,
+						" "
+					)
 				),
 				React.createElement(
-					"h3",
-					{ className: "stickerRarity" },
-					" Rarity: ",
-					sticker.rarity,
-					" "
-				),
-				React.createElement(
-					"h3",
-					{ className: "stickerTradable" },
-					" Tradable: ",
-					stickerTradeStatus,
-					" "
-				),
-				React.createElement(
-					"button",
-					{ className: "selectSticker", onClick: function onClick() {
-							return getUserBalance();
-						} },
-					" Select Me "
-				),
-				React.createElement(
-					"button",
-					{ className: "tradeSticker", onClick: function onClick() {
-							return removeFromTradingFloor(sticker);
-						} },
-					" Take off Trading Floor "
+					"div",
+					{ className: "stickerOther" },
+					React.createElement(
+						"h3",
+						{ className: "stickerRarity" },
+						" Rarity: ",
+						sticker.rarity,
+						" "
+					),
+					React.createElement(
+						"h3",
+						{ className: "stickerTradable" },
+						" Tradable: ",
+						stickerTradeStatus,
+						" "
+					),
+					React.createElement(
+						"button",
+						{ className: "tradeSticker", onClick: function onClick() {
+								return removeFromTradingFloor(sticker);
+							} },
+						" Take off Trading Floor "
+					)
 				)
 			);
 		}
@@ -240,6 +264,14 @@ var StickerList = function StickerList(props) {
 				"h3",
 				{ className: "stickerName" },
 				" Name: ",
+				React.createElement(
+					"span",
+					null,
+					" ",
+					React.createElement("br", null),
+					" "
+				),
+				" ",
 				sticker.name,
 				" "
 			),
@@ -259,13 +291,6 @@ var StickerList = function StickerList(props) {
 			),
 			React.createElement(
 				"button",
-				{ className: "selectSticker", onClick: function onClick() {
-						return getUserBalance();
-					} },
-				" Select Me "
-			),
-			React.createElement(
-				"button",
 				{ className: "tradeSticker", onClick: function onClick() {
 						return RenderStickerTradeMenu(sticker);
 					} },
@@ -273,6 +298,8 @@ var StickerList = function StickerList(props) {
 			)
 		);
 	}); // old solution for tradeSticker button. handleSelectSticker(sticker._id)
+	// <button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
+	// <button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
 	return React.createElement(
 		"div",
 		{ className: "stickerList" },

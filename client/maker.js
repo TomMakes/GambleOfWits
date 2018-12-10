@@ -43,6 +43,7 @@ const handleSelectTradeSticker = (e) => {
 };
 
 function grabNewStickers() {
+    event.preventDefault();
     let dataPack = 'firstPack';
 	sendAjax('GET', '/generateStickers', dataPack, (data) => {
 		ReactDOM.render(
@@ -138,7 +139,9 @@ const AccountInfo = (props) => {
 	<div>
 		<h3> Username: {props.account.account.username} <span> <br /> </span>
 			 Credits: {props.account.account.balance}</h3>
-			<button className="generateStickers" onClick={() => grabNewStickers()}> Open Free Sticker Pack! </button>
+            <section className="button" id="makerUpgradeButton"><a  onClick={() => grabNewStickers()}
+            href="/upgrade">Open Free Sticker Pack!</a></section>
+            <span> <br /> <br /> <br /> </span>  
 	</div>
 	);
 };
@@ -159,13 +162,15 @@ const StickerList = function(props) {
         stickerTradeStatus = "True";
         return(
 		<div key={sticker._id} className="sticker">
-			<img src= {sticker.url} alt="domo Face" className="stickerFace" />
-			<h3 className="stickerName"> Name: {sticker.name} </h3>
-			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
-			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
-			<button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
-			<button className="tradeSticker" onClick={() => removeFromTradingFloor(sticker)}> Take off Trading Floor </button>
-            
+			<div className="stickerBase">
+              <img src= {sticker.url} alt="domo Face" className="stickerFace" />
+			  <h3 className="stickerName"> Name: <span> <br /> </span> {sticker.name} </h3>
+            </div>
+            <div className="stickerOther">
+			 <h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
+			 <h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
+			 <button className="tradeSticker" onClick={() => removeFromTradingFloor(sticker)}> Take off Trading Floor </button>
+            </div>
 		</div>
 	    ); 
       }
@@ -173,15 +178,16 @@ const StickerList = function(props) {
 	return(
 		<div key={sticker._id} className="sticker">
 			<img src= {sticker.url} alt="domo Face" className="stickerFace" />
-			<h3 className="stickerName"> Name: {sticker.name} </h3>
+			<h3 className="stickerName"> Name: <span> <br /> </span> {sticker.name} </h3>
 			<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
 			<h3 className="stickerTradable"> Tradable: {stickerTradeStatus} </h3>
-			<button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
 			<button className="tradeSticker" onClick={() => RenderStickerTradeMenu(sticker)}> Trade Me </button>
             
 		</div>
 	); 
   }); // old solution for tradeSticker button. handleSelectSticker(sticker._id)
+// <button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
+// <button className="selectSticker" onClick={() => getUserBalance()}> Select Me </button>
 return (
 	<div className="stickerList">
 		{stickerNodes}

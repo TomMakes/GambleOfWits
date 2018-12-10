@@ -51,6 +51,7 @@ function handlePurchaseSticker(stickId) {
 	sendAjax('GET', '/changeOwner', stickId, function (result) {
 		console.dir(result);
 		loadTradeStickersFromServer();
+		getUserBalance();
 	});
 }
 
@@ -80,6 +81,14 @@ var TradeStickers = function TradeStickers(props) {
 					'h3',
 					{ className: 'stickerName' },
 					' Name: ',
+					React.createElement(
+						'span',
+						null,
+						' ',
+						React.createElement('br', null),
+						' '
+					),
+					' ',
 					sticker.name,
 					' '
 				),
@@ -93,7 +102,7 @@ var TradeStickers = function TradeStickers(props) {
 				React.createElement(
 					'h3',
 					{ className: 'stickerPrice' },
-					' Price: This Sticker is Yours '
+					' Owned by you '
 				)
 			);
 		} else {
@@ -108,6 +117,14 @@ var TradeStickers = function TradeStickers(props) {
 					'h3',
 					{ className: 'stickerName' },
 					' Name: ',
+					React.createElement(
+						'span',
+						null,
+						' ',
+						React.createElement('br', null),
+						' '
+					),
+					' ',
 					sticker.name,
 					' '
 				),

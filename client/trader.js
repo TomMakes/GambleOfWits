@@ -39,6 +39,7 @@ function handlePurchaseSticker(stickId){
 	sendAjax('GET', '/changeOwner', stickId, (result) => {
 		console.dir(result);
 		loadTradeStickersFromServer();
+        getUserBalance();
 	});
 	
 }
@@ -60,9 +61,9 @@ const TradeStickers = function(props) {
 	 return(
 	 	<div key={sticker._id} className="sticker">
 	 		<img src={sticker.url} alt="domo Face" className="stickerFace" />
-	 		<h3 className="stickerName"> Name: {sticker.name} </h3>
+	 		<h3 className="stickerName"> Name: <span> <br /> </span> {sticker.name} </h3>
 	 		<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
-	 		<h3 className="stickerPrice"> Price: This Sticker is Yours </h3>
+	 		<h3 className="stickerPrice"> Owned by you </h3>
 	 	</div>
 	 );
     }
@@ -73,7 +74,7 @@ const TradeStickers = function(props) {
       return(
 	 	<div key={sticker._id} className="sticker">
 	 		<img src={sticker.url} alt="domo Face" className="stickerFace" />
-	 		<h3 className="stickerName"> Name: {sticker.name} </h3>
+	 		<h3 className="stickerName"> Name: <span> <br /> </span> {sticker.name} </h3>
 	 		<h3 className="stickerRarity"> Rarity: {sticker.rarity} </h3>
 	 		<h3 className="stickerPrice"> Price: {sticker.balance} </h3>
 	 		<button className="selectSticker" onClick={() => handlePurchaseSticker(sticker._id)}> Buy Me </button>
