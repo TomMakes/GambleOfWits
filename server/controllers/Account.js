@@ -261,13 +261,31 @@ const checkForDailyBonus = (request, response) => {
         }
       }
     }
-   // Set the last given login bonus to today
-   userInfo.lastLoginBonus = currentTime;
-   //  Give the user their login bonus
-   addBalance(userId, 100);
-   // Return 1 for successful daily bonus given  
-  
-   return res.json({ status: true });
+    // Set the last given login bonus to today
+    userInfo.lastLoginBonus = currentTime;
+    console.log("Checking if correct save");
+    console.dir(userInfo.lastLoginBonus);
+    
+    // Save this new login time so user doesn't keep getting bonuses
+    const userAccount = new Account.AccountModel(userInfo);
+
+    // Make the promise to save
+    const userPromise = userAccount.save();
+    
+    userPromise.then(() => {
+      addBalance(userId, 100);
+      return res.json({ status: true });
+    });
+
+    userPromise.catch((err) => {
+          console.log(err);
+          if (err.code === 11000) {
+            return ('error: Account already exists occured ');
+          }
+    
+          return ('error: Error occured ');
+    });
+    
   });
 };
 
